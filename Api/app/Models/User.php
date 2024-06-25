@@ -24,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -33,6 +34,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'is_admin',
         'remember_token',
     ];
 
@@ -49,7 +51,12 @@ class User extends Authenticatable
         ];
     }
 
-    public function Images(){
+    public function isAdmin()
+    {
+        return $this->is_admin;
+    }
+
+    public function house(){
         return $this->belongsTo(House::class,'user_id', 'idUser');
     }
 }
