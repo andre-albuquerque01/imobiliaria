@@ -2,64 +2,62 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\HouseException;
 use App\Models\House;
+use App\Service\HouseService;
 use Illuminate\Http\Request;
 
 class HouseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    private $houseService;
+
+    public function __construct(HouseService $houseService)
+    {
+        $this->houseService = $houseService;
+    }
     public function index()
     {
-        //
+        try {
+            return $this->houseService->index();
+        } catch (\Exception $e) {
+            throw new HouseException('', $e->getCode(), $e);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(array $data)
     {
-        //
+        try {
+            return $this->houseService->store($data);
+        } catch (\Exception $e) {
+            throw new HouseException('', $e->getCode(), $e);
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(string $id)
     {
-        //
+        try {
+            return $this->houseService->show($id);
+        } catch (\Exception $e) {
+            throw new HouseException('', $e->getCode(), $e);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(House $house)
+    public function update(string $id, array $data)
     {
-        //
+        try {
+            return $this->houseService->update($id, $data);
+        } catch (\Exception $e) {
+            throw new HouseException('Failed to update house and images', $e->getCode(), $e);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(House $house)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, House $house)
+    public function destroy(string $id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(House $house)
-    {
-        //
+        try {
+            return $this->houseService->destroy($id);
+        } catch (\Exception $e) {
+            throw new HouseException('', $e->getCode(), $e);
+        }
     }
 }
