@@ -40,7 +40,7 @@ class VerifyEmailMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.verifyEmail',
+            view: 'verifyEmail',
         );
     }
 
