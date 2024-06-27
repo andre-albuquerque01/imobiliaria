@@ -52,6 +52,17 @@ services:
                 - '${DB_USERNAME}'
             retries: 3
             timeout: 5s
+    pgadmin:
+        depends_on:
+            - pgsql
+        image: dpage/pgadmin4
+        environment:
+            PGADMIN_DEFAULT_EMAIL: 'admin@admin.com'
+            PGADMIN_DEFAULT_PASSWORD: 'admin'
+        networks:
+            - sail
+        ports:
+            - 8081:80
     redis:
         image: 'redis:alpine'
         ports:
