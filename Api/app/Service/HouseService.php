@@ -26,7 +26,7 @@ class HouseService
 
     public function store(array $data)
     {
-        try {
+        // try {
             $house = auth()->user()->house()->create($data);
 
             $images = [
@@ -38,9 +38,9 @@ class HouseService
             ];
             Images::create($images);
             return new GeneralResource(['message' => 'success']);
-        } catch (\Exception $e) {
-            throw new HouseException('', $e->getCode(), $e);
-        }
+        // } catch (\Exception $e) {
+        //     throw new HouseException('', $e->getCode(), $e);
+        // }
     }
 
     public function show(string $id)

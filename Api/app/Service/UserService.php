@@ -24,21 +24,21 @@ class UserService
     {
         $this->request = $request;
     }
-
     public function login(array $data)
     {
         try {
             if (Auth::attempt($data)) {
                 if (User::where("email", $data["email"])->whereNull('email_verified_at')->exists()) {
-                    return new GeneralResource(['message' => 'E-mail nao verificado']);
+                    return new GeneralResource(['message' => 'E-mail não verificado']);
                 }
 
-                $token = $this->request->user()->createToken("Jesus" . auth()->user()->idUser, ['user'], now()->addHours(2))->plainTextToken;
+                $user = Auth::user();
+                $token = $this->request->user()->createToken('Jesus+' . $user->name, ['*'], now()->addHours(2))->plainTextToken;
 
                 if (auth()->user()->isAdmin()) {
-                    $token = $this->request->user()->createToken("Jesus" . auth()->user()->idUser, ['*'], now()->addHours(2))->plainTextToken;
+                    $token = $this->request->user()->createToken("Jesus" . $user->name, ['*'], now()->addHours(2))->plainTextToken;
                 }
-
+                
                 return new AuthResource(['token' => $token]);
             }
         } catch (\Exception $e) {
