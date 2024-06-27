@@ -12,6 +12,7 @@ class Images extends Model
     protected $table = 'images';
     protected $primaryKey = "idImage";
     protected $fillable = [
+        'house_id',
         'imageOne',
         'imageTwo',
         'imageThree',
@@ -20,6 +21,6 @@ class Images extends Model
 
     public function images()
     {
-        return $this->hasMany(House::class, 'house_id');
+        return $this->belongsTo(House::class, 'house_id', 'idHouse');
     }
 }

@@ -21,10 +21,10 @@ class House extends Model
 
     public function user()
     {
-        return $this->hasMany(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'idUser');
     }
     public function images()
     {
-        return $this->belongsTo(Images::class, 'house_id');
+        return $this->hasMany(Images::class, 'house_id', 'idHouse');
     }
 }
