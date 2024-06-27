@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\HouseException;
+use App\Http\Requests\HouseRequest;
 use App\Models\House;
 use App\Service\HouseService;
 use Illuminate\Http\Request;
@@ -24,13 +25,13 @@ class HouseController extends Controller
         }
     }
 
-    public function store(array $data)
+    public function store(HouseRequest $data)
     {
-        try {
-            return $this->houseService->store($data);
-        } catch (\Exception $e) {
-            throw new HouseException('', $e->getCode(), $e);
-        }
+        // try {
+            return $this->houseService->store($data->validated());
+        // } catch (\Exception $e) {
+        //     throw new HouseException('', $e->getCode(), $e);
+        // }
     }
 
     public function show(string $id)
@@ -42,10 +43,10 @@ class HouseController extends Controller
         }
     }
 
-    public function update(string $id, array $data)
+    public function update(string $id, HouseRequest $data)
     {
         try {
-            return $this->houseService->update($id, $data);
+            return $this->houseService->update($id, $data->validated());
         } catch (\Exception $e) {
             throw new HouseException('Failed to update house and images', $e->getCode(), $e);
         }
