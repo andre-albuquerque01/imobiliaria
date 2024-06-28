@@ -27,11 +27,11 @@ class HouseController extends Controller
 
     public function store(HouseRequest $data)
     {
-        // try {
+        try {
             return $this->houseService->store($data->validated());
-        // } catch (\Exception $e) {
-        //     throw new HouseException('', $e->getCode(), $e);
-        // }
+        } catch (\Exception $e) {
+            throw new HouseException('', $e->getCode(), $e);
+        }
     }
 
     public function show(string $id)
