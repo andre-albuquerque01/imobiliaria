@@ -22,6 +22,7 @@ class HouseResource extends JsonResource
             "value" => $this->value,
             "address" => $this->address,
             "image"=> ImageResource::collection($this->whenLoaded("images")),
+            "user"=> new User2Resource($this->whenLoaded("user")),
         ];
     }
 }
