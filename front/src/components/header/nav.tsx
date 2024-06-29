@@ -57,7 +57,13 @@ export const Header = () => {
               href="/workOut"
               className="transform duration-500 rounded-md hover:bg-zinc-600 p-2"
             >
-              <span onClick={() => setNavBar(false)}>WorkOut</span>
+              <span onClick={() => setNavBar(false)}>Meus anúncios</span>
+            </Link>
+            <Link
+              href="/workOut"
+              className="transform duration-500 rounded-md hover:bg-zinc-600 p-2"
+            >
+              <span onClick={() => setNavBar(false)}>Pesquisar</span>
             </Link>
             <Link
               href="/user"
