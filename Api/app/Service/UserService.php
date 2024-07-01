@@ -11,6 +11,7 @@ use App\Jobs\SendVerifyEmailJob;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -38,7 +39,7 @@ class UserService
                 if (auth()->user()->isAdmin()) {
                     $token = $this->request->user()->createToken("Jesus" . $user->name, ['*'], now()->addHours(2))->plainTextToken;
                 }
-                
+
                 return new AuthResource(['token' => $token]);
             }
         } catch (\Exception $e) {
@@ -53,7 +54,7 @@ class UserService
             $data['is_admin'] = 0;
             $data['remember_token'] = Str::random(60);
             $user = User::create($data);
-            dispatch(new SendVerifyEmailJob($user->email, $user->remember_token, $user->idUser));
+            dispatch(new SendVerifyEmailJob($user->email, Crypt::encrypt($user->remember_token), $user->idUser));
             return new GeneralResource(['message' => 'success']);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
@@ -92,6 +93,20 @@ class UserService
         }
     }
 
+    public function verifyEmail(string $id, string $token)
+    {
+        try {
+            $user = User::findOrFail($id);
+            if (Crypt::decrypt($token) == $user->remember_token) {
+                $user->touch("email_verified_at");
+                return new GeneralResource(['message' => 'success']);
+            }
+            throw new UserException("Token invalid");
+        } catch (UserException $e) {
+            throw new UserException();
+        }
+    }
+
     public function resendEmail(string $email)
     {
         try {
@@ -99,7 +114,7 @@ class UserService
             if (!$user) {
                 throw new UserException('', 400);
             }
-            dispatch(new SendVerifyEmailJob($user->email, $user->remember_token, $user->idUser));
+            dispatch(new SendVerifyEmailJob($user->email, Crypt::encrypt($user->remember_token), $user->idUser));
             return new GeneralResource(['message' => 'success']);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
