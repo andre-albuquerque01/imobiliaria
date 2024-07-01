@@ -72,6 +72,15 @@ class UserController extends Controller
             throw new UserException('', $e->getCode(), $e);
         }
     }
+
+    public function verifyEmail(string $id, string $token)
+    {
+        try {
+            return $this->userService->verifyEmail($id, $token);
+        } catch (UserException $e) {
+            throw new UserException();
+        }
+    }
     public function resendEmail(Request $request)
     {
         try {
