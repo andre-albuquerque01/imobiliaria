@@ -15,7 +15,7 @@ class HouseService
     public function index()
     {
         try {
-            $house = House::with('images')->with('user')->get();
+            $house = House::with('images')->with('user')->paginate(50);
             return HouseResource::collection($house);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
