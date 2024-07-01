@@ -22,6 +22,7 @@ Route::prefix('v1')->group(function () {
     Route::get('house', [HouseController::class, 'index']);
     Route::get('house/{id}', [HouseController::class, 'show']);
     Route::post('user', [UserController::class, 'store']);
+    Route::get('email/verify/{id}/{token}', [UserController::class, 'verifyEmail']);
     
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('logout', [UserController::class, 'logout']);
