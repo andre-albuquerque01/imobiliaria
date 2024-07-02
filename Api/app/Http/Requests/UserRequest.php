@@ -25,6 +25,7 @@ class UserRequest extends FormRequest
     {
         $rules = [
             "name" => ["required", "string", "min:4", "max:255"],
+            "contact" => ["required", "string", "min:8", "max:11"],
             "email" => [
                 "required",
                 "email",
@@ -54,7 +55,7 @@ class UserRequest extends FormRequest
         ];
 
         if ($this->method() === "PUT") {
-            $rules["name"] = ["nullable"];
+            $rules["name"] = ["nullable", "string", "min:4", "max:255"];
             $rules["email"] = [
                 "required",
                 "email",
@@ -72,6 +73,7 @@ class UserRequest extends FormRequest
                 ->uncompromised(),
             ];
             $rules["password_confirmation"] = ["nullable"];
+            $rules["contact"] = ["nullable", "string", "min:8", "max:11"];
         }
         return $rules;
     }
