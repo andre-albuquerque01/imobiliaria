@@ -18,6 +18,7 @@ class User2Resource extends JsonResource
         return [
             'idUser' => $this->idUser,
             'name' => $this->name,
+            'contact' => $this->contact,
         ];
     }
 }
