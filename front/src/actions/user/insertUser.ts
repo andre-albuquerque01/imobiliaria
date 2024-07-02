@@ -12,6 +12,7 @@ export async function InsertUser(
 ) {
   const name = request.get('name') as string | null
   const email = request.get('email') as string | null
+  const contact = request.get('contact') as string | null
   const password = request.get('password') as string | null
   const passwordConfirmation = request.get('password_confirmation') as
     | string
@@ -20,7 +21,14 @@ export async function InsertUser(
   request.set('term_aceite', String(termAceite))
 
   try {
-    if (!name || !email || !password || !passwordConfirmation || !termAceite) {
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !contact ||
+      !passwordConfirmation ||
+      !termAceite
+    ) {
       throw new Error('Preenchas os dados!')
     }
     if (password !== passwordConfirmation) {
