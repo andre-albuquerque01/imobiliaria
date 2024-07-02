@@ -5,11 +5,6 @@ import apiError from '@/functions/error/apiErro'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-export interface UserInterface {
-  name: string
-  email: string
-}
-
 export default async function User() {
   try {
     const response = await ApiAction('/user', {
