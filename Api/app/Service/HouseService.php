@@ -29,10 +29,10 @@ class HouseService
 
             $images = [
                 'house_id' => $house->idHouse,
-                'imageOne' => $data['imageOne'],
-                'imageTwo' => $data['imageTwo'],
-                'imageThree' => $data['imageThree'],
-                'imageFour' => $data['imageFour'],
+                'imageOne' => $data['imageOne'] ?? '',
+                'imageTwo' => $data['imageTwo'] ?? '',
+                'imageThree' => $data['imageThree'] ?? '',
+                'imageFour' => $data['imageFour'] ?? '',
             ];
             Images::create($images);
             return new GeneralResource(['message' => 'success']);
@@ -44,7 +44,7 @@ class HouseService
     public function show(string $id)
     {
         try {
-            $house = House::findOrFail($id)->with('images')->first();
+            $house = House::where('idHouse', $id)->with('images')->with('user')->first();
             return new HouseResource($house);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
@@ -54,15 +54,18 @@ class HouseService
     public function update(string $id, array $data)
     {
         try {
-            $house = auth()->user()->house()->findOrFail($id);
+            $user = auth()->user();
+            $house = $user->house()->where('idHouse', $id);
             $house->update($data);
+
+            $img = $house->images()->where('house_id', $house->idHouse)->first();
             $images = [
-                'imageOne' => $data['imageOne'],
-                'imageTwo' => $data['imageTwo'],
-                'imageThree' => $data['imageThree'],
-                'imageFour' => $data['imageFour'],
+                'imageOne' => $data['imageOne'] ?? $img->imageOne,
+                'imageTwo' => $data['imageTwo'] ??  $img->imageTwo,
+                'imageThree' => $data['imageThree'] ??  $img->imageThree,
+                'imageFour' => $data['imageFour'] ??  $img->imageFour,
             ];
-            $house->images()->where('house_id', $house->idHouse)->update($images);
+            $img->update($images);
 
             return new GeneralResource(['message' => 'success']);
         } catch (\Exception $e) {
