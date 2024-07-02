@@ -1,50 +1,30 @@
+import { ShowHouses } from '@/actions/house/getAll'
 import { Card } from '@/components/cardHome/card'
+interface SearchParamsProps {
+  searchParams: {
+    page: number
+  }
+}
 
-export default function Home() {
+type requestType = {
+  data: []
+  countPage: number
+}
+export default async function Home({ searchParams }: SearchParamsProps) {
+  let { page } = searchParams || 1
+  if (page === undefined) page = 1
+
+  const dt = (await ShowHouses(page)) as requestType
+  const data = dt.data
+  const count = dt.countPage
+
   return (
     <div className="mt-10 flex flex-col gap-3">
-      <Card
-        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5OGbIcXNwv2QdjS5j3fnLL4nWkAg85Gfgjw&usqp=CAU"
-        id="1"
-        location="Casa bela"
-        price={500}
-        title="Jesus is good"
-      />
-      <Card
-        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5OGbIcXNwv2QdjS5j3fnLL4nWkAg85Gfgjw&usqp=CAU"
-        id="1"
-        location="Casa bela"
-        price={500}
-        title="Jesus is good"
-      />
-      <Card
-        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5OGbIcXNwv2QdjS5j3fnLL4nWkAg85Gfgjw&usqp=CAU"
-        id="1"
-        location="Casa bela"
-        price={500}
-        title="Jesus is good"
-      />
-      <Card
-        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5OGbIcXNwv2QdjS5j3fnLL4nWkAg85Gfgjw&usqp=CAU"
-        id="1"
-        location="Casa bela"
-        price={500}
-        title="Jesus is good"
-      />
-      <Card
-        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5OGbIcXNwv2QdjS5j3fnLL4nWkAg85Gfgjw&usqp=CAU"
-        id="1"
-        location="Casa bela"
-        price={500}
-        title="Jesus is good"
-      />
-      <Card
-        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5OGbIcXNwv2QdjS5j3fnLL4nWkAg85Gfgjw&usqp=CAU"
-        id="1"
-        location="Casa bela"
-        price={500}
-        title="Jesus is good"
-      />
+      {data.length > 0 ? (
+        <Card countPage={count} query={page} data={data} />
+      ) : (
+        <p>Não há anúncios disponível!</p>
+      )}
     </div>
   )
 }
