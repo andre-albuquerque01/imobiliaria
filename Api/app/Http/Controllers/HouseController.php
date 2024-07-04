@@ -24,6 +24,14 @@ class HouseController extends Controller
             throw new HouseException('', $e->getCode(), $e);
         }
     }
+    public function housesUser()
+    {
+        try {
+            return $this->houseService->housesUser();
+        } catch (\Exception $e) {
+            throw new HouseException('', $e->getCode(), $e);
+        }
+    }
 
     public function store(HouseRequest $data)
     {
@@ -38,6 +46,14 @@ class HouseController extends Controller
     {
         try {
             return $this->houseService->show($id);
+        } catch (\Exception $e) {
+            throw new HouseException('', $e->getCode(), $e);
+        }
+    }
+    public function showTitle(string $title)
+    {
+        try {
+            return $this->houseService->showTitle($title);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
         }
