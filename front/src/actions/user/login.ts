@@ -62,5 +62,5 @@ export async function Login(
   } catch (error) {
     return apiError(error)
   }
-  redirect('/dashboard')
+  redirect('/house/user')
 }
