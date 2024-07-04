@@ -1,14 +1,12 @@
 'use server'
 
 import ApiAction from '@/functions/data/apiAction'
-import { cookies } from 'next/headers'
 
 export async function ShowHouses(page: number) {
   try {
     const response = await ApiAction(`/house?page=${page}`, {
       headers: {
         Accept: 'application/json',
-        Authorization: 'Bearer' + cookies().get('token')?.value,
       },
       next: {
         revalidate: 1,
