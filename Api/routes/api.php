@@ -21,6 +21,7 @@ Route::prefix('v1')->group(function () {
     Route::put('resetPassword', [UserController::class, 'resetPassword']);
     Route::get('house', [HouseController::class, 'index']);
     Route::get('house/{id}', [HouseController::class, 'show']);
+    Route::get('houseTitle/{title}', [HouseController::class, 'showTitle']);
     Route::post('user', [UserController::class, 'store']);
     Route::get('email/verify/{id}/{token}', [UserController::class, 'verifyEmail']);
     
@@ -30,6 +31,7 @@ Route::prefix('v1')->group(function () {
         Route::put('user', [UserController::class, 'update']);
         Route::delete('user', [UserController::class, 'destroy']);
 
+        Route::get('housesUser', [HouseController::class, 'housesUser']);
         Route::post('house', [HouseController::class, 'store']);
         Route::put('house/{id}', [HouseController::class, 'update']);
         Route::delete('house/{id}', [HouseController::class, 'destroy']);
