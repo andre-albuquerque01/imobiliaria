@@ -32,11 +32,38 @@ export async function UpdatePasswordRecoverUser(
       body: request,
     })
 
-    // const data = await response.json()
-    // const message =
-    //   typeof data.message === 'string'
-    //     ? data.message
-    //     : JSON.stringify(data.message)
+    const data = await response.json()
+    const message =
+      typeof data.message === 'string'
+        ? data.message
+        : JSON.stringify(data.message)
+
+    if (
+      message &&
+      message.includes('The password field must be at least 8 characters.')
+    )
+      throw new Error('A senha deve ter ao menos 8 caracters')
+    if (
+      message &&
+      message.includes('The password field must contain at least one symbol.')
+    )
+      throw new Error('A senha precisa de um caracter especial')
+    if (
+      message &&
+      message.includes(
+        'The password field must contain at least one uppercase and one lowercase letter.',
+      )
+    )
+      throw new Error(
+        'Senha precisa de ao menos uma letra maisucla e uma minisucla',
+      )
+    if (
+      message &&
+      message.includes(
+        'The given password has appeared in a data leak. Please choose a different password.',
+      )
+    )
+      throw new Error('Senha fraca.')
 
     if (!response)
       return { ok: false, error: 'Houve erro, tenta novamente', data: null }
