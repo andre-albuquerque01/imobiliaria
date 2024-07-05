@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { fontBody } from './font'
-import { Header } from '@/components/header/nav'
+import { HeaderOff } from '@/components/header/navOff'
+import { cookies } from 'next/headers'
+import { HeaderOn } from '@/components/header/navOn'
 
 export const metadata: Metadata = {
   title: 'Imobiliaria',
@@ -13,10 +15,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const token = cookies().get('token')?.value
+  const authentication =
+    token !== undefined && token.length >= 49 && token.length <= 53
   return (
     <html lang="pt-br" className={fontBody.className}>
       <body className="antialiased scroll-smooth">
-        <Header />
+        {authentication ? <HeaderOn /> : <HeaderOff />}
         <div className="max-w-[1200px] mx-auto">{children}</div>
       </body>
     </html>
