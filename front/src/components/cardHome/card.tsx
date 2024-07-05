@@ -1,40 +1,57 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { IoLocationOutline } from 'react-icons/io5'
+import LinkPagination from '../pagination/pagination'
+import { HouseInterface } from '@/interfaces/all'
 
-interface CardInterface {
-  title: string
-  location: string
-  price: number
-  image: string
-  id: string
-}
-
-export const Card = ({ ...props }: CardInterface) => {
+export const Card = ({
+  data,
+  query,
+  countPage,
+}: {
+  data: HouseInterface[]
+  query: number
+  countPage: number
+}) => {
   return (
-    <div className="md:w-[800px] max-md:w-80 border border-zinc-500 md:h-40 mx-auto">
-      <Link href="" className="flex h-full py-4 pr-2">
-        <Image
-          src={props.image}
-          //   src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5OGbIcXNwv2QdjS5j3fnLL4nWkAg85Gfgjw&usqp=CAU"
-          width={150}
-          height={150}
-          alt="Imagem do anúncio"
-          className="object-contain max-h-[160px] max-w-[160px] mx-4"
-        />
-        <div className="flex justify-between w-full max-md:flex-col">
-          <div className="flex flex-col justify-between">
-            <h1>{props.title}</h1>
-            <p className="text-sm opacity-80 flex items-center">
-              <IoLocationOutline size={18} />
-              {props.location}
-            </p>
+    <>
+      {data &&
+        data.length > 0 &&
+        data.map((house) => (
+          <div
+            className="md:w-[800px] max-md:w-80 border border-zinc-500 md:h-40 mx-auto transform duration-200 hover:text-zinc-400"
+            key={house.idHouse}
+          >
+            <Link
+              href={`house/${house.idHouse}`}
+              className="flex h-full py-4 pr-2"
+            >
+              <Image
+                src={
+                  house.image[0]?.imageOne ||
+                  'https://images.pexels.com/photos/101808/pexels-photo-101808.jpeg?auto=compress&cs=tinysrgb&w=600'
+                }
+                width={150}
+                height={150}
+                alt="Imagem do anúncio"
+                className="object-contain max-h-[160px] max-w-[160px] mx-4"
+              />
+              <div className="flex justify-between w-full max-md:flex-col">
+                <div className="flex flex-col justify-between">
+                  <h1>{house.title}</h1>
+                  <p className="text-sm opacity-80 flex items-center">
+                    <IoLocationOutline size={18} />
+                    {house.address}
+                  </p>
+                </div>
+                <div className="">
+                  <p>R$ {house.value}</p>
+                </div>
+              </div>
+            </Link>
           </div>
-          <div className="">
-            <p>R$ {props.price}</p>
-          </div>
-        </div>
-      </Link>
-    </div>
+        ))}
+      <LinkPagination query={query} countPage={countPage} />
+    </>
   )
 }
