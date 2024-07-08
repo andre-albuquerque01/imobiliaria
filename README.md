@@ -24,3 +24,8 @@ Arquitetura da API:
 
 - MVC
 - RESTful
+
+Além disso, faz uso de:
+
+- React
+- Docker
