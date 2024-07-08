@@ -57,3 +57,14 @@ composer install
 Crie um arquivo `.env` na raiz do seu projeto e configure as variáveis de ambiente conforme necessário.
 Execute `php artisan config:cache` para aplicar as configurações do arquivo `.env`.
 
+Inicie o servidor da API:
+
+```bash
+./vendor/bin/sail up -d
+```
+
+No Linux:
+
+```bash
+sudo ./vendor/bin/sail up
+```
