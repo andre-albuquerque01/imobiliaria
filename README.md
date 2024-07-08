@@ -29,3 +29,13 @@ Além disso, faz uso de:
 
 - React
 - Docker
+
+## Como Iniciar o Sistema
+
+### Passo 1: Download dos Arquivos
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/andre-albuquerque01/Imobiliaria.git
+```
