@@ -15,4 +15,12 @@ Banco de dados:
 
 - POSTGRESQL
 
+Frameworks:
 
+- Laravel 11
+- Next.js
+
+Arquitetura da API:
+
+- MVC
+- RESTful
