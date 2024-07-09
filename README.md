@@ -39,3 +39,11 @@ Clone o repositório:
 ```bash
 git clone https://github.com/andre-albuquerque01/Imobiliaria.git
 ```
+
+### Passo 2: Configuração do Back-end
+
+Entre na pasta back-end:
+
+```bash
+cd /Imobiliaria/Api
+```
