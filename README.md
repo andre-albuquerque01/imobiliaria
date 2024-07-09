@@ -47,3 +47,13 @@ Entre na pasta back-end:
 ```bash
 cd /Imobiliaria/Api
 ```
+
+Inicialize os pacotes do Laravel:
+
+```php
+composer install
+```
+
+Crie um arquivo `.env` na raiz do seu projeto e configure as variáveis de ambiente conforme necessário.
+Execute `php artisan config:cache` para aplicar as configurações do arquivo `.env`.
+
