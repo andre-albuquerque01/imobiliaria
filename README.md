@@ -68,3 +68,23 @@ No Linux:
 ```bash
 sudo ./vendor/bin/sail up
 ```
+
+Para desativar o servidor da API:
+
+```bash
+./vendor/bin/sail down
+```
+
+No Linux:
+
+```bash
+sudo ./vendor/bin/sail down
+```
+
+### Passo 3: Configuração do Front-end
+
+Entre na pasta front-end:
+
+```bash
+cd ../app
+```
