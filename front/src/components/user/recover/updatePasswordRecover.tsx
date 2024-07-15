@@ -1,11 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
-import { UpdatePasswordRecoverUser } from '@/actions/user/recover/updatePasswordRecover'
+import {
+  UpdatePasswordRecoverUser,
+  UpdatePasswordRequestInterface,
+} from '@/actions/user/recover/updatePasswordRecover'
 import { InputComponent } from '@/components/form/inputComponent'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import { useFormState, useFormStatus } from 'react-dom'
+import { FormEvent, useEffect, useState } from 'react'
+import { useFormStatus } from 'react-dom'
 import { GoArrowLeft } from 'react-icons/go'
 
 function FormButton() {
@@ -18,14 +21,14 @@ function FormButton() {
           className="bg-blue-600 text-white px-4 py-2 w-96 max-md:w-80 max-md:mx-auto rounded-lg"
           disabled={pending}
         >
-          Cadastrando...
+          Alterando...
         </button>
       ) : (
         <button
           className="bg-blue-600 text-white px-4 py-2 w-96 max-md:w-80 max-md:mx-auto rounded-lg"
           disabled={pending}
         >
-          Cadastrar
+          Alterar
         </button>
       )}
     </>
@@ -37,22 +40,38 @@ export const UpdatePasswordRecoverComponent = ({
 }: {
   token: string
 }) => {
-  const [state, action] = useFormState(UpdatePasswordRecoverUser, {
-    ok: false,
-    error: '',
-    data: null,
-  })
   const router = useRouter()
+  const [error, setError] = useState<string | boolean>('')
 
   useEffect(() => {
-    if (state && state.ok) {
+    if (error) {
       alert('Senha alterada com sucesso!')
       router.push('/')
     }
-  }, [state])
+  }, [error])
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+
+    const formData = new FormData(e.currentTarget)
+    const data: UpdatePasswordRequestInterface = {
+      token,
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+      password_confirmation: formData.get('password_confirmation') as string,
+    }
+    const response = await UpdatePasswordRecoverUser(data)
+    if (response) {
+      alert('Alterado com sucesso!')
+      router.push('/')
+    } else setError(response)
+  }
 
   return (
-    <form className="space-y-5 flex flex-col text-black" action={action}>
+    <form
+      className="space-y-5 flex flex-col text-black"
+      onSubmit={handleSubmit}
+    >
       <Link href="/" className="flex items-center ">
         <GoArrowLeft className="w-5 h-5" /> Voltar
       </Link>
@@ -78,7 +97,7 @@ export const UpdatePasswordRecoverComponent = ({
         id="Confirmação de senha"
         required={true}
       />
-      <p className="text-xs text-red-600">{state && state.error}</p>
+      <p className="text-xs text-red-600">{error && error}</p>
       <FormButton />
     </form>
   )
