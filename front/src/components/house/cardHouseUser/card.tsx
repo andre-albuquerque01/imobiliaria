@@ -19,7 +19,7 @@ export const CardHouseUser = ({
         data.length > 0 &&
         data.map((house) => (
           <div
-            className="md:w-[800px] max-md:w-80 border border-zinc-500 md:h-40 mx-auto transform duration-200 hover:text-zinc-400"
+            className="md:w-[800px] max-md:w-80 border md:h-40 mx-auto transform duration-200 hover:text-zinc-400"
             key={house.idHouse}
           >
             <Link
@@ -34,9 +34,9 @@ export const CardHouseUser = ({
                 width={150}
                 height={150}
                 alt="Imagem do anúncio"
-                className="object-contain max-h-[160px] max-w-[160px] mx-4"
+                className="object-contain max-h-40 w-[30%] max-w-40 max-md:max-h-[90px] mx-4"
               />
-              <div className="flex justify-between w-full max-md:flex-col max-md:max-w-32">
+              <div className="flex justify-between w-[70%] max-md:flex-col">
                 <div className="flex flex-col justify-between">
                   <h1 className="truncate w-full">{house.title}</h1>
                   <p>R$ {house.value}</p>
