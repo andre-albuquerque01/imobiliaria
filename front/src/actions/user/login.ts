@@ -26,6 +26,7 @@ export async function Login(
     })
 
     const data = await response.json()
+    console.log(data)
 
     const message =
       data && data.data && typeof data.data.message === 'string'
@@ -49,6 +50,9 @@ export async function Login(
     }
     if (message.includes('The password field must be at least 8 characters.')) {
       throw new Error('E-mail ou senha inválida!')
+    }
+    if (message.includes('Unexpected end of JSON input')) {
+      throw new Error('Usuário ou senha inválido!')
     }
 
     if (!response.ok) throw new Error('Usuário ou senha inválido!')
