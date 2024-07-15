@@ -11,7 +11,7 @@ export async function ShowHousesUser(page: number) {
         Authorization: 'Bearer ' + cookies().get('token')?.value,
       },
       next: {
-        revalidate: 1,
+        revalidate: 60 * 30,
         tags: ['house'],
       },
     })
