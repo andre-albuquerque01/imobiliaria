@@ -9,7 +9,7 @@ export async function ShowOneHouses(id: string) {
         Accept: 'application/json',
       },
       next: {
-        revalidate: 1,
+        revalidate: 60 * 30,
         tags: ['house'],
       },
     })
