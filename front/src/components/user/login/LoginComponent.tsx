@@ -61,10 +61,16 @@ export const LoginComponent = () => {
         )}
         {state.error &&
           state.error !== 'E-mail não verificado' &&
+          state.error !== 'Unexpected end of JSON input' &&
           state.error !==
             "Cannot read properties of undefined (reading 'message')" && (
             <span className="text-xs text-red-600">{state.error}</span>
           )}
+        {state.error === 'Unexpected end of JSON input' && (
+          <span className="text-xs text-red-600">
+            Erro ao realizar o login.
+          </span>
+        )}
         <p className="text-black text-xs">
           Esqueceu a senha?
           <Link
