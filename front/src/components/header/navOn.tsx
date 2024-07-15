@@ -61,12 +61,6 @@ export const HeaderOn = () => {
               <span onClick={() => setNavBar(false)}>Meus anúncios</span>
             </Link>
             <Link
-              href="/"
-              className="transform duration-500 rounded-md hover:bg-zinc-600 p-2"
-            >
-              <span onClick={() => setNavBar(false)}>Pesquisar</span>
-            </Link>
-            <Link
               href="/user/update"
               className="transform duration-500 rounded-md hover:bg-zinc-600 p-2"
             >
