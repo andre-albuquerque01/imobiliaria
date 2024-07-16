@@ -24,7 +24,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
       <div className="md:w-[800px] max-md:w-80 mx-auto">
         <SearchForm />
       </div>
-      {data.length > 0 ? (
+      {data && data.length > 0 ? (
         <Card countPage={count} query={page} data={data} letter="p" />
       ) : (
         <p>Não há anúncios disponível!</p>
