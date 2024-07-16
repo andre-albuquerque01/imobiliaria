@@ -12,5 +12,6 @@ export default function VerifyEmail({ params }: { params: { id: string } }) {
       router.push('/')
     }
     handleData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
