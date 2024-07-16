@@ -25,6 +25,12 @@ class RecoverPasswordRequest extends FormRequest
     {
         return [
             "token" => "required",
+            "email" => [
+                "required",
+                "email",
+                "max:255",
+                "min:2",
+            ],
             "password" => [
                 "required",
                 "confirmed",
