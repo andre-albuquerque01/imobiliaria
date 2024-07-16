@@ -26,7 +26,6 @@ export async function Login(
     })
 
     const data = await response.json()
-    console.log(data)
 
     const message =
       data && data.data && typeof data.data.message === 'string'
