@@ -67,6 +67,7 @@ class UserService
             if (!Hash::check($data['password'], $user->password)) {
                 return new GeneralResource(['message' => 'Password incorret']);
             }
+            $data['password'] = $user->password;
             User::where("idUser", $user->idUser)->update($data);
             return new GeneralResource(['message' => 'success']);
         } catch (\Exception $e) {
@@ -171,6 +172,8 @@ class UserService
             User::where('email', $passwordResetTokens->email)->update([
                 'password' => Hash::make($data['password']),
             ]);
+            DB::table('password_reset_tokens')->where('token', $data['token'])->delete();
+            return new GeneralResource(['message' => 'success']);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
         }
