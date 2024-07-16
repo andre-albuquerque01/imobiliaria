@@ -19,7 +19,7 @@ export const CardHouseUser = ({
         data.length > 0 &&
         data.map((house) => (
           <div
-            className="md:w-[800px] max-md:w-80 border md:h-40 mx-auto transform duration-200 hover:text-zinc-400"
+            className="md:w-[800px] max-md:w-80 border md:h-40 mx-auto max-md:max-h-[120px] rounded-lg transform duration-200 hover:text-zinc-400"
             key={house.idHouse}
           >
             <Link
