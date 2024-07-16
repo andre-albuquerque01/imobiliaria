@@ -15,7 +15,7 @@ class HouseService
     public function index()
     {
         try {
-            $house = House::with('images')->with('user')->paginate(50);
+            $house = House::with('images')->with('user')->latest('updated_at')->paginate(50);
             return HouseResource::collection($house);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
@@ -24,7 +24,7 @@ class HouseService
     public function housesUser()
     {
         try {
-            $house = auth()->user()->house()->with('images')->paginate(50);
+            $house = auth()->user()->house()->with('images')->latest('updated_at')->paginate(50);
             return HouseResource::collection($house);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
@@ -62,7 +62,7 @@ class HouseService
     public function showTitle(string $title)
     {
         try {
-            $house = House::where('title', 'LIKE', '%' . $title . '%')->with('images')->with('user')->get();
+            $house = House::where('title', 'LIKE', '%' . $title . '%')->with('images')->with('user')->latest('updated_at')->paginate(50);
             return HouseResource::collection($house);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
