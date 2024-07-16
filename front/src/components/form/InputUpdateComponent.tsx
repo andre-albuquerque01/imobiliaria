@@ -4,7 +4,7 @@ interface InputProps {
   id: string
   name: string
   required: boolean
-  value: string
+  value: string | number
 }
 
 export const InputUpdateComponent = ({ ...props }: InputProps) => {
