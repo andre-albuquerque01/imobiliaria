@@ -20,8 +20,6 @@ export async function UpdatePasswordRecoverUser(
     if (request.password !== request.password_confirmation) {
       return 'Senhas incompatíveis!'
     }
-    console.log(request)
-
     VerificationPassword(request.password)
 
     const response = await ApiAction('/resetPassword', {
