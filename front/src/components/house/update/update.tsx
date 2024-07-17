@@ -67,7 +67,6 @@ export const UpdateHouseComponent = ({ id }: { id: string }) => {
 
     const formData = new FormData(e.currentTarget)
     const dt = Object.fromEntries(formData)
-    console.log(dt)
 
     const req = await UpdateHouse(dt, id)
     if (req === 'true') {
