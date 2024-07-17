@@ -1,15 +1,39 @@
-## Getting Started
+# Work out in laravel
 
-First, run the development server:
+## Como Iniciar o Front-end
+
+### Passo 1: Configuração do Front-end
+
+Entre na pasta front-end:
+
+```bash
+cd ../front
+```
+
+Baixe as dependências do Node.js:
+
+```bash
+npm i
+```
+
+Inicie o servidor do Next.js:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ou
+
+```bash
+npm run build
+```
+
+e
+
+```bash
+npm run start
+```
+
+### Passo 2: Acesso ao Sistema
+
+Abra o navegador e acesse `http://localhost:3000` para utilizar o serviço.
