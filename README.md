@@ -10,7 +10,7 @@ Para operar o sistema, são necessários os seguintes requisitos mínimos na sua
 
 - Informações: permitir que os usuários do aplicativo façam login com seus dados pessoais, e-mail e senha.
 
-#### Regras
+Regras
 
 - Cadastro novo usuário: para criar um novo cadastro de usuário, o usuário deve fornecer um endereço de email e uma senha. Após o cadastro, um email de confirmação será enviado para o endereço de email fornecido, a fim de validar o novo cadastro do usuário.
 - Esqueci a senha: o usuário esqueceu sua senha, logo é enviado um e-mail um token.
@@ -20,7 +20,7 @@ Para operar o sistema, são necessários os seguintes requisitos mínimos na sua
 
 - Informações: permitir que o usuário da aplicação gerencie seus anúncios, fazendo o cadastro/excluindo os anúncios...
 
-#### Regras
+Regras
 
 - A aplicação deve permitir que o usuário cadastre novos anúncios;
 - A aplicação deve permitir que o usuário exclua anúncios que não estejam mais em uso;
@@ -31,7 +31,7 @@ Para operar o sistema, são necessários os seguintes requisitos mínimos na sua
 
 - Informações: permitir que os usuários da aplicação visualizem os anúncios;
 
-#### Regras
+Regras
 
 - Permitir que os usuários visualizem os anúncios completo de forma simples;
 - Fornecer imagens e descrições claras dos anúncios;
@@ -48,6 +48,10 @@ O sistema utiliza as seguintes linguagens:
 - **Arquitetura da API:** MVC, RESTful
 - **Outras Tecnologias:** Docker
 
+### Observação
+
+- O sistema utiliza filas (queues) no Laravel para enviar e-mails de forma assíncrona, funcionando em segundo plano.
+
 ## Como Iniciar o Sistema
 
 ### Passo 1: Download dos Arquivos
@@ -55,7 +59,7 @@ O sistema utiliza as seguintes linguagens:
 Clone o repositório:
 
 ```bash
-git clone https://github.com/andre-albuquerque01/Imobiliaria.git
+git clone https://github.com/andre-albuquerque01/imobiliaria.git
 ```
 
 ### Passo 2: Configuração do Back-end
@@ -63,7 +67,7 @@ git clone https://github.com/andre-albuquerque01/Imobiliaria.git
 Entre na pasta back-end:
 
 ```bash
-cd /Imobiliaria/Api
+cd /Api
 ```
 
 Inicialize os pacotes do Laravel:
