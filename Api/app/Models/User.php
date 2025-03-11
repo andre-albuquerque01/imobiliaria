@@ -28,6 +28,7 @@ class User extends Authenticatable
         'contact',
         'remember_token',
         'is_admin',
+        'term_aceite'
     ];
 
     /**
@@ -38,6 +39,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'is_admin',
+        'term_aceite',
         'remember_token',
         'email_verified_at',
     ];
