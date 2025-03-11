@@ -15,21 +15,26 @@ Route::get('/', function () {
 
 
 Route::prefix('v1')->group(function () {
-    Route::post('login', [UserController::class, 'login']);
-    Route::post('email/resendEmail', [UserController::class, 'resendEmail']);
-    Route::post('email/recoverPasswordSendEmail', [UserController::class, 'recoverPasswordSendEmail']);
-    Route::put('resetPassword', [UserController::class, 'resetPassword']);
+    Route::prefix('user')->group(function () {
+        Route::post('sessions', [UserController::class, 'login']);
+        Route::post('register', [UserController::class, 'store']);
+        Route::post('reSendEmail', [UserController::class, 'resendEmail']);
+        Route::post('sendTokenRecover', [UserController::class, 'sendTokenRecover']);
+        Route::get('verify/{id}/{token}', [UserController::class, 'verifyEmail']);
+        Route::put('resetPassword', [UserController::class, 'resetPassword']);
+    });
+    
     Route::get('house', [HouseController::class, 'index']);
     Route::get('house/{id}', [HouseController::class, 'show']);
     Route::get('houseTitle/{title}', [HouseController::class, 'showTitle']);
-    Route::post('user', [UserController::class, 'store']);
-    Route::get('email/verify/{id}/{token}', [UserController::class, 'verifyEmail']);
     
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('logout', [UserController::class, 'logout']);
-        Route::get('user', [UserController::class, 'show']);
-        Route::put('user', [UserController::class, 'update']);
-        Route::delete('user', [UserController::class, 'destroy']);
+        Route::prefix('user')->group(function () {
+            Route::post('logout', [UserController::class, 'logout']);
+            Route::get('show', [UserController::class, 'show']);
+            Route::put('update', [UserController::class, 'update']);
+            Route::delete('user', [UserController::class, 'destroy']);
+        });
 
         Route::get('housesUser', [HouseController::class, 'housesUser']);
         Route::post('house', [HouseController::class, 'store']);
