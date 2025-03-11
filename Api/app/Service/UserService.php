@@ -3,9 +3,9 @@
 namespace App\Service;
 
 use App\Exceptions\UserException;
-use App\Http\Resources\AuthResource;
 use App\Http\Resources\GeneralResource;
 use App\Http\Resources\UserResource;
+use App\Interface\UserServiceInterface;
 use App\Jobs\SendRecoverPasswordEmailJob;
 use App\Jobs\SendVerifyEmailJob;
 use App\Models\User;
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 
-class UserService
+class UserService implements UserServiceInterface
 {
     private $request;
 
@@ -36,11 +36,11 @@ class UserService
                 $user = Auth::user();
                 $token = $this->request->user()->createToken('Jesus+' . $user->name, ['*'], now()->addHours(2))->plainTextToken;
 
-                if (auth()->user()->isAdmin()) {
+                if (Auth::user()->isAdmin()) {
                     $token = $this->request->user()->createToken("Jesus" . $user->name, ['*'], now()->addHours(2))->plainTextToken;
                 }
 
-                return new AuthResource(['token' => $token]);
+                return response()->json(['token' => $token], 200);
             }
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
@@ -55,7 +55,7 @@ class UserService
             $data['remember_token'] = Str::random(60);
             $user = User::create($data);
             dispatch(new SendVerifyEmailJob($user->email, Crypt::encrypt($user->remember_token), $user->idUser));
-            return new GeneralResource(['message' => 'success']);
+            return response()->json(['message' => 'success'], 201);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
         }
@@ -65,11 +65,11 @@ class UserService
         try {
             $user = auth()->user();
             if (!Hash::check($data['password'], $user->password)) {
-                return new GeneralResource(['message' => 'Password incorret']);
+                return response()->json(['message' => 'Password incorrect'], 401);
             }
             $data['password'] = $user->password;
             User::where("idUser", $user->idUser)->update($data);
-            return new GeneralResource(['message' => 'success']);
+            return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
         }
@@ -97,14 +97,17 @@ class UserService
     public function verifyEmail(string $id, string $token)
     {
         try {
-            $user = User::findOrFail($id);
-            if (Crypt::decrypt($token) == $user->remember_token) {
+            $user = User::where('idUser', $id)->first();
+            if (!$user) {
+                return response()->json(['message' => 'user not found'], 404);
+            }
+            if ($token == $user->remember_token) {
                 $user->touch("email_verified_at");
                 return new GeneralResource(['message' => 'success']);
             }
-            throw new UserException("Token invalid");
+            return response()->json(['message' => 'Token invalid'], 401);
         } catch (UserException $e) {
-            throw new UserException();
+            throw new UserException($e->getMessage());
         }
     }
 
@@ -113,7 +116,7 @@ class UserService
         try {
             $user = User::where('email', $email)->first();
             if (!$user) {
-                throw new UserException('', 400);
+                return response()->json(['message' => 'User not found'], 404);
             }
             dispatch(new SendVerifyEmailJob($user->email, Crypt::encrypt($user->remember_token), $user->idUser));
             return new GeneralResource(['message' => 'success']);
@@ -125,7 +128,7 @@ class UserService
     {
         try {
             $user = User::where('idUser', $id)->where("remember_token", $token)->first();
-            if (!$user) throw new UserException('', 400);
+            if (!$user) return response()->json(['message' => 'User not found'], 404);
 
             $user->touch('email_verified_at');
             return new GeneralResource(['message' => 'success']);
@@ -134,11 +137,11 @@ class UserService
         }
     }
 
-    public function recoverPasswordSendEmail(string $email)
+    public function sendTokenRecover(string $email)
     {
         try {
             $user = User::where("email", $email)->first();
-            if (!$user) throw new UserException("User not found");
+            if (!$user) return response()->json(['message' => 'User not found'], 404);
 
             $token = Str::random(60);
             $passwordResetToken = DB::table('password_reset_tokens')->where('email', $email)->first();
@@ -157,7 +160,7 @@ class UserService
             }
 
             SendRecoverPasswordEmailJob::dispatch($email, $token);
-            return new GeneralResource(['message' => 'success']);
+            return new GeneralResource(['message' => 'send e-mail']);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
         }
@@ -167,7 +170,7 @@ class UserService
     {
         try {
             $passwordResetTokens = DB::table('password_reset_tokens')->where('token', $data['token'])->first();
-            if (!isset($passwordResetTokens)) throw new UserException("Token invalid");
+            if (!isset($passwordResetTokens)) return response()->json(['message' => 'Token invalid'], 404);
 
             User::where('email', $passwordResetTokens->email)->update([
                 'password' => Hash::make($data['password']),
