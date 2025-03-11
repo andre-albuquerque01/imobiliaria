@@ -5,11 +5,12 @@ namespace App\Service;
 use App\Exceptions\HouseException;
 use App\Http\Resources\GeneralResource;
 use App\Http\Resources\HouseResource;
+use App\Interface\HouseServiceInterface;
 use App\Models\House;
 use App\Models\Images;
 use App\Models\User;
 
-class HouseService
+class HouseService implements HouseServiceInterface
 {
 
     public function index()
@@ -36,14 +37,15 @@ class HouseService
         try {
             $house = auth()->user()->house()->create($data);
 
-            $images = [
-                'house_id' => $house->idHouse,
-                'imageOne' => $data['imageOne'] ?? '',
-                'imageTwo' => $data['imageTwo'] ?? '',
-                'imageThree' => $data['imageThree'] ?? '',
-                'imageFour' => $data['imageFour'] ?? '',
-            ];
-            Images::create($images);
+            if (!empty($data['image'])) {
+                foreach ($data['image'] as $imageUrl) {
+                    Images::create([
+                        'house_id' => $house->idHouse,
+                        'image' => $imageUrl,
+                    ]);
+                }
+            }
+
             return new GeneralResource(['message' => 'success']);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
@@ -75,30 +77,27 @@ class HouseService
             $user = auth()->user();
             $house = $user->house()->where('idHouse', $id)->first();
 
-            if ($house) {
-                $house->update($data);
-
-                $img = $house->images()->where('house_id', $house->idHouse)->first();
-
-                if ($img) {
-                    $images = [
-                        'imageOne' => $data['imageOne'] ?? '',
-                        'imageTwo' => $data['imageTwo'] ?? '',
-                        'imageThree' => $data['imageThree'] ?? '',
-                        'imageFour' => $data['imageFour'] ?? '',
-                    ];
-                    $img->update($images);
-                }
-
-                return new GeneralResource(['message' => 'success']);
+            if (!$house) {
+                return new GeneralResource(['message' => 'House not found'], 404);
             }
 
-            return new GeneralResource(['message' => 'House not found'], 404);
+            $house->update($data);
+
+            if (!empty($data['image'])) {
+                $house->images()->delete();
+
+                foreach ($data['image'] as $imageUrl) {
+                    $house->images()->create([
+                        'image' => $imageUrl,
+                    ]);
+                }
+            }
+
+            return new GeneralResource(['message' => 'success']);
         } catch (\Exception $e) {
             throw new HouseException('Failed to update house and images', $e->getCode(), $e);
         }
     }
-
 
     public function destroy(string $id)
     {
