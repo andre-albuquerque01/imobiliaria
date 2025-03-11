@@ -13,10 +13,7 @@ class Images extends Model
     protected $primaryKey = "idImage";
     protected $fillable = [
         'house_id',
-        'imageOne',
-        'imageTwo',
-        'imageThree',
-        'imageFour',
+        'image',
     ];
 
     public function images()
