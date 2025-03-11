@@ -87,11 +87,11 @@ class UserController extends Controller
         }
     }
 
-    public function recoverPasswordSendEmail(Request $request)
+    public function sendTokenRecover(Request $request)
     {
         try {
             $validatedData = $request->validate(['email' => 'required|email']);
-            return $this->userService->recoverPasswordSendEmail($validatedData['email']);
+            return $this->userService->sendTokenRecover($validatedData['email']);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
         }
