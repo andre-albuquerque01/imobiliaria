@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation'
 
 export async function Logout() {
   try {
-    const response = await ApiAction('/logout', {
+    const response = await ApiAction('/user/logout', {
       method: 'POST',
       headers: {
         accept: 'application/json',
