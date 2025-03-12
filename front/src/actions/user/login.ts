@@ -17,7 +17,7 @@ export async function Login(
   try {
     if (!email || !password) throw new Error('Preenchas os dados!')
 
-    const response = await ApiAction('/login', {
+    const response = await ApiAction('/user/sessions', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
