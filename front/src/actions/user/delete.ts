@@ -7,7 +7,7 @@ import { cookies } from 'next/headers'
 
 export async function DeleteUser() {
   try {
-    await ApiAction(`/user`, {
+    await ApiAction(`/user/delete`, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
