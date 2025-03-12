@@ -33,7 +33,7 @@ Route::prefix('v1')->group(function () {
             Route::post('logout', [UserController::class, 'logout']);
             Route::get('show', [UserController::class, 'show']);
             Route::put('update', [UserController::class, 'update']);
-            Route::delete('user', [UserController::class, 'destroy']);
+            Route::delete('delete', [UserController::class, 'destroy']);
         });
 
         Route::get('housesUser', [HouseController::class, 'housesUser']);
