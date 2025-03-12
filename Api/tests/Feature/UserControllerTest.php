@@ -2,127 +2,244 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\UserController;
-use App\Http\Requests\AuthRequest;
-use App\Service\UserService;
-use Illuminate\Http\JsonResponse;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Mockery;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
-    public function testLoginWithValidDataReturnsExpectedResult()
+    use RefreshDatabase;
+
+    public function test_user_registration()
     {
-        // Arrange
-        $mockUserService = Mockery::mock(UserService::class);
-        $mockUserService->shouldReceive('login')
-            ->once()
-            ->with(['email' => 'test@example.com', 'password' => 'test123'])
-            ->andReturn(new JsonResponse(['message' => 'success'], 200));
+        $store = [
+            'name' => 'John Doe',
+            'email' => 'john.doe@example.com',
+            'contact' => '11400289222',
+            'password' => 'caUzinha@1857',
+            'password_confirmation' => 'caUzinha@1857',
+            'term_aceite' => 1,
+        ];
 
-        $this->app->instance(UserService::class, $mockUserService);
+        $response = $this->post('/api/v1/user/register', $store);
 
-        $requestData = ['email' => 'test@example.com', 'password' => 'test123'];
-        $request = new AuthRequest();
-        $request->setContainer($this->app);
-        $request->merge($requestData);
+        $response->assertStatus(201);
+    }
 
-        $controller = new UserController($mockUserService);
+    public function test_user_authentication()
+    {
+        $user = User::factory()->create([
+            'email' => 'john.doe@example.com',
+            'password' => 'strongPassword@1231254124',
+            'term_aceite' => 1,
+            'email_verified_at' => now(),
+        ]);
 
-        // Act
-        $response = $controller->login($request);
+        $credentials = [
+            'email' => 'john.doe@example.com',
+            'password' => 'strongPassword@1231254124',
+        ];
 
-        // Assert
+        $response = $this->post('/api/v1/user/sessions', $credentials);
         $response->assertStatus(200);
-        $response->assertJson(['message' => 'success']);
     }
 
-    // Additional test cases for different scenarios
-    public function testLoginWithInvalidEmailReturns422()
+    public function test_show_user()
     {
-        // Arrange
-        $requestData = ['email' => 'invalid_email', 'password' => 'test123'];
-        $request = new AuthRequest();
-        $request->setContainer($this->app);
-        $request->merge($requestData);
+        $user = User::factory()->create([
+            'email' => 'john.doe@example.com',
+            'password' => 'strongPassword@1231254124',
+            'term_aceite' => 1,
+            'email_verified_at' => now(),
+        ]);
 
-        $controller = new UserController(Mockery::mock(UserService::class));
+        $credentials = [
+            'email' => 'john.doe@example.com',
+            'password' => 'strongPassword@1231254124',
+        ];
 
-        // Act
-        $response = $controller->login($request);
+        $loginResponse = $this->postJson('/api/v1/user/sessions', $credentials);
 
-        // Assert
-        $response->assertStatus(422);
-        $response->assertJsonStructure(['email']);
+        $loginResponse->assertStatus(200);
+        $token = $loginResponse->json('token');
+
+        $response1 = $this->getJson('/api/v1/user/show', [
+            'Authorization' => "Bearer $token",
+        ]);
+
+        $response1->assertStatus(200);
+    }
+    
+
+    public function test_user_update()
+    {
+        User::factory()->create([
+            'email' => 'john.doe@example.com',
+            'password' => 'strongPassword@1231254124',
+            'term_aceite' => 1,
+            'email_verified_at' => now(),
+        ]);
+
+        $credentials = [
+            'email' => 'john.doe@example.com',
+            'password' => 'strongPassword@1231254124',
+        ];
+
+        $loginResponse = $this->postJson('/api/v1/user/sessions', $credentials);
+
+        $loginResponse->assertStatus(200);
+        $token = $loginResponse->json('token');
+
+        $response1 = $this->putJson('/api/v1/user/update',  [
+            'email' => 'teste@example.com',
+            'password' => 'strongPassword@1231254124',
+        ], [
+            'Authorization' => "Bearer ". $token,
+        ]);
+
+        $response1->assertStatus(200);
+    }
+    public function test_user_update_error()
+    {
+        User::factory()->create([
+            'email' => 'john.doe@example.com',
+            'password' => 'strongPassword@1231254124',
+            'term_aceite' => 1,
+            'email_verified_at' => now(),
+        ]);
+
+        $credentials = [
+            'email' => 'john.doe@example.com',
+            'password' => 'strongPassword@1231254124',
+        ];
+
+        $loginResponse = $this->postJson('/api/v1/user/sessions', $credentials);
+
+        $loginResponse->assertStatus(200);
+        $token = $loginResponse->json('token');
+
+        $response1 = $this->putJson('/api/v1/user/update',  [
+            'email' => 'teste@example.com',
+            'password' => 'strongPassword@12312541214',
+        ], [
+            'Authorization' => "Bearer $token",
+        ]);
+
+        $response1->assertStatus(401)
+            ->assertJson(['message' => 'Password incorrect']);
     }
 
-    public function testLoginWithInvalidPasswordReturns422()
+    public function test_user_send_email_verify()
     {
-        // Arrange
-        $requestData = ['email' => 'test@example.com', 'password' => ''];
-        $request = new AuthRequest();
-        $request->setContainer($this->app);
-        $request->merge($requestData);
+        $user = User::factory()->create([
+            'remember_token' => 'valid_token',
+            'term_aceite' => 1,
+        ]);
+        $response = $this->postJson('/api/v1/user/reSendEmail', [
+            "email" => $user->email,
+        ]);
 
-        $controller = new UserController(Mockery::mock(UserService::class));
+        $response->assertStatus(200);
+    }
+    public function test_user_send_email_not_found_user()
+    {
+        $user = User::factory()->create([
+            'remember_token' => 'valid_token',
+            'term_aceite' => 1,
+        ]);
+        $response = $this->postJson('/api/v1/user/reSendEmail', [
+            "email" => 'clau@example.com',
+        ]);
 
-        // Act
-        $response = $controller->login($request);
-
-        // Assert
-        $response->assertStatus(422);
-        $response->assertJsonStructure(['password']);
+        $response->assertStatus(404);
     }
 
-    public function testLoginWithNonexistentUserReturns401()
+    public function test_verifies_email_successfully()
     {
-        // Arrange
-        $mockUserService = Mockery::mock(UserService::class);
-        $mockUserService->shouldReceive('login')
-            ->once()
-            ->andThrow(new \Exception('User not found', 401));
+        $user = User::factory()->create([
+            'remember_token' => 'valid_token',
+            'term_aceite' => 1,
+        ]);
+        $response = $this->getJson("/api/v1/user/verify/{$user->idUser}/{$user->remember_token}");
 
-        $this->app->instance(UserService::class, $mockUserService);
+        $response->assertStatus(200);
+    }
 
-        $requestData = ['email' => 'test@example.com', 'password' => 'test123'];
-        $request = new AuthRequest();
-        $request->setContainer($this->app);
-        $request->merge($requestData);
+    public function test_returns_error_for_invalid_token()
+    {
+        $user = User::factory()->create([
+            'remember_token' => 'valid_token',
+            'term_aceite' => 1,
+            'email_verified_at' => null,
+        ]);
+        $response = $this->getJson("/api/v1/user/verify/{$user->idUser}/invalid_token");
 
-        $controller = new UserController($mockUserService);
-
-        // Act
-        $response = $controller->login($request);
-
-        // Assert
         $response->assertStatus(401);
-        $response->assertJson(['message' => 'User not found']);
     }
 
-    public function testLoginWithInvalidCredentialsReturns401()
+    public function test_returns_error_for_non_existent_user()
     {
-        // Arrange
-        $mockUserService = Mockery::mock(UserService::class);
-        $mockUserService->shouldReceive('login')
-            ->once()
-            ->andThrow(new \Exception('Invalid credentials', 401));
+        $response = $this->getJson("/api/v1/user/verify/1adew/invalid_token");
+        $response->assertStatus(404);
+    }
 
-        $this->app->instance(UserService::class, $mockUserService);
+    public function test_user_send_token_recover()
+    {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'remember_token' => 'valid_token',
+            'term_aceite' => 1,
+        ]);
+        $response = $this->postJson('/api/v1/user/sendTokenRecover', [
+            "email" => $user->email,
+        ]);
 
-        $requestData = ['email' => 'test@example.com', 'password' => 'test123'];
-        $request = new AuthRequest();
-        $request->setContainer($this->app);
-        $request->merge($requestData);
+        $response->assertStatus(200)->assertJsonPath('data.message', 'send e-mail');
 
-        $controller = new UserController($mockUserService);
+        $this->assertDatabaseHas('password_reset_tokens', [
+            'email' => 'test@example.com',
+        ]);
+    }
+    public function test_user_send_token_recover_not_found_user()
+    {
+        $response = $this->postJson('/api/v1/user/sendTokenRecover', [
+            "email" => 'john@example.com',
+        ]);
+        $response->assertStatus(404);
+    }
 
-        // Act
-        $response = $controller->login($request);
+    public function test_reset_password()
+    {
+        $user = User::factory()->create([
+            'email' => 'test@example.com',
+            'password' => Hash::make('oldpassword'),
+            'term_aceite' => 1,
+        ]);
 
-        // Assert
-        $response->assertStatus(401);
-        $response->assertJson(['message' => 'Invalid credentials']);
+        $token = strtoupper(Str::random(60));
+        DB::table('password_reset_tokens')->insert([
+            'email' => 'test@example.com',
+            'token' => $token,
+            'created_at' => now(),
+        ]);
+
+        $passwordRecover = Hash::make('newpassword');
+        $response = $this->putJson('/api/v1/user/resetPassword', [
+            'token' => $token,
+            'email' => 'test@example.com',
+            'password' => $passwordRecover,
+            'password_confirmation' => $passwordRecover,
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJsonPath('data.message', 'success');
+
+        $this->assertDatabaseMissing('password_reset_tokens', [
+            'email' => 'test@example.com',
+        ]);
     }
 }
