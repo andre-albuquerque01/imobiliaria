@@ -13,11 +13,7 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->ulid('idImage')->primary();
-            $table->longText('imageOne');
-            $table->longText('imageTwo');
-            $table->longText('imageThree');
-            $table->longText('imageFour');
-            $table->index('house_id');
+            $table->string('image');
             $table->foreignUlid('house_id')->constrained("houses", 'idHouse')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
