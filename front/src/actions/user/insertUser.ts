@@ -37,7 +37,7 @@ export async function InsertUser(
 
     VerificationPassword(password)
 
-    const response = await ApiAction('/user', {
+    const response = await ApiAction('/user/register', {
       method: 'POST',
       headers: {
         accept: 'application/json',
