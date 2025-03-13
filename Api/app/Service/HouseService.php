@@ -26,6 +26,9 @@ class HouseService implements HouseServiceInterface
     {
         try {
             $house = auth()->user()->house()->with('images')->latest('updated_at')->paginate(50);
+            if ($house->isEmpty()) {
+                return response()->json(['message' => 'House not found'], 404);
+            }
             return HouseResource::collection($house);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
@@ -46,7 +49,7 @@ class HouseService implements HouseServiceInterface
                 }
             }
 
-            return new GeneralResource(['message' => 'success']);
+            return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
         }
@@ -56,6 +59,9 @@ class HouseService implements HouseServiceInterface
     {
         try {
             $house = House::where('idHouse', $id)->with('images')->with('user')->first();
+            if (!$house) {
+                return response()->json(['message' => 'House not found'], 404);
+            }
             return new HouseResource($house);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
@@ -65,6 +71,9 @@ class HouseService implements HouseServiceInterface
     {
         try {
             $house = House::where('title', 'LIKE', '%' . $title . '%')->with('images')->with('user')->latest('updated_at')->paginate(50);
+            if ($house->isEmpty()) {
+                return response()->json(['message' => 'House not found'], 404);
+            }
             return HouseResource::collection($house);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
@@ -78,7 +87,7 @@ class HouseService implements HouseServiceInterface
             $house = $user->house()->where('idHouse', $id)->first();
 
             if (!$house) {
-                return new GeneralResource(['message' => 'House not found'], 404);
+                return response()->json(['message' => 'House not found'], 404);
             }
 
             $house->update($data);
@@ -93,7 +102,7 @@ class HouseService implements HouseServiceInterface
                 }
             }
 
-            return new GeneralResource(['message' => 'success']);
+            return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             throw new HouseException('Failed to update house and images', $e->getCode(), $e);
         }
@@ -103,7 +112,7 @@ class HouseService implements HouseServiceInterface
     {
         try {
             House::findOrFail($id, 'idHouse')->delete();
-            return new GeneralResource(['message' => 'success']);
+            return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
         }
