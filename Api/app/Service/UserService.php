@@ -30,15 +30,11 @@ class UserService implements UserServiceInterface
         try {
             if (Auth::attempt($data)) {
                 if (User::where("email", $data["email"])->whereNull('email_verified_at')->exists()) {
-                    return new GeneralResource(['message' => 'E-mail não verificado']);
+                    return response()->json(['message' => 'E-mail não verificado'], 400);
                 }
 
                 $user = Auth::user();
-                $token = $this->request->user()->createToken('Jesus+' . $user->name, ['*'], now()->addHours(2))->plainTextToken;
-
-                if (Auth::user()->isAdmin()) {
-                    $token = $this->request->user()->createToken("Jesus" . $user->name, ['*'], now()->addHours(2))->plainTextToken;
-                }
+                $token = $this->request->user()->createToken('Jesus' . $user->name, ['*'], now()->addHours(2))->plainTextToken;
 
                 return response()->json(['token' => $token], 200);
             }
@@ -88,7 +84,7 @@ class UserService implements UserServiceInterface
     {
         try {
             User::findOrFail(auth()->user()->idUser)->delete();
-            return new GeneralResource(['message' => 'success']);
+            return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
         }
@@ -103,7 +99,7 @@ class UserService implements UserServiceInterface
             }
             if ($token == $user->remember_token) {
                 $user->touch("email_verified_at");
-                return new GeneralResource(['message' => 'success']);
+                return response()->json(['message' => 'success'], 200);
             }
             return response()->json(['message' => 'Token invalid'], 401);
         } catch (UserException $e) {
@@ -119,7 +115,7 @@ class UserService implements UserServiceInterface
                 return response()->json(['message' => 'User not found'], 404);
             }
             dispatch(new SendVerifyEmailJob($user->email, Crypt::encrypt($user->remember_token), $user->idUser));
-            return new GeneralResource(['message' => 'success']);
+            return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
         }
@@ -131,7 +127,7 @@ class UserService implements UserServiceInterface
             if (!$user) return response()->json(['message' => 'User not found'], 404);
 
             $user->touch('email_verified_at');
-            return new GeneralResource(['message' => 'success']);
+            return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
         }
@@ -160,7 +156,7 @@ class UserService implements UserServiceInterface
             }
 
             SendRecoverPasswordEmailJob::dispatch($email, $token);
-            return new GeneralResource(['message' => 'send e-mail']);
+            return response()->json(['message' => 'send e-mail'], 200);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
         }
@@ -176,7 +172,7 @@ class UserService implements UserServiceInterface
                 'password' => Hash::make($data['password']),
             ]);
             DB::table('password_reset_tokens')->where('token', $data['token'])->delete();
-            return new GeneralResource(['message' => 'success']);
+            return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
         }
