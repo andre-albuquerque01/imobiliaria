@@ -24,8 +24,8 @@ class HouseRequest extends FormRequest
         $rules = [
             "title" => ["required", "string", "min:4", "max:255"],
             "description" => ["required", "string", "min:4", "max:255"],
-            "rooms" => ["nullable", "string", "min:1", "max:20"],
-            "value" => ["required", "string", "min:2", "max:255"],
+            "rooms" => ["nullable", "min:1", "max:20"],
+            "value" => ["required", "min:2", "max:255"],
             "address" => ["required", "string", "min:2", "max:255"],
             "image" => ["required", "array", "min:1"], 
             "image.*" => ["required", "string", "url"], 
@@ -47,8 +47,6 @@ class HouseRequest extends FormRequest
     public function messages()
     {
         return [
-            "token.required" => "O token é obrigatório.",
-
             "title.required" => "O titulo é obrigatório.",
             "title.max" => "O titulo não pode ter mais de 255 caracteres.",
             "title.min" => "O titulo deve ter pelo menos 4 caracteres.",
