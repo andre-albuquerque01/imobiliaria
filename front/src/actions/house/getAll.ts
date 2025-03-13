@@ -25,7 +25,6 @@ export async function ShowHouses(page: number) {
 
     return { data, countPage }
   } catch (err) {
-    console.log(err)
     return null
   }
 }
