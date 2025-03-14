@@ -2,6 +2,7 @@
 
 import ApiAction from '@/functions/data/apiAction'
 import { RevalidateTag } from '@/functions/data/revalidateTag'
+import { HouseRequestWithReturnError } from '@/functions/error/house-request'
 import { cookies } from 'next/headers'
 
 export async function UpdateHouse(reqBody: object, id: string) {
@@ -18,16 +19,14 @@ export async function UpdateHouse(reqBody: object, id: string) {
 
     const data = await response.json()
 
-    const message =
-      typeof data.message === 'string'
-        ? data.message
-        : JSON.stringify(data.message)
+    if (!response.ok) {
+      return HouseRequestWithReturnError(data.message)
+    }
 
     if (response.ok) {
-      RevalidateTag('training')
+      RevalidateTag('house')
       return 'true'
     }
-    return message
   } catch (error) {
     return 'Houver error'
   }
