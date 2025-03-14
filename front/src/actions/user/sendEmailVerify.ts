@@ -2,6 +2,7 @@
 
 import ApiAction from '@/functions/data/apiAction'
 import apiError from '@/functions/error/apiErro'
+import { UserRequestError } from '@/functions/error/user-request'
 
 export async function SendEmailVerifyUser(
   state: { ok: boolean; error: string; data: null },
@@ -14,7 +15,7 @@ export async function SendEmailVerifyUser(
       throw new Error('Preenchas os dados!')
     }
 
-    const response = await ApiAction('/email/resendEmail', {
+    const response = await ApiAction('/user/reSendEmail', {
       method: 'POST',
       headers: {
         accept: 'application/json',
@@ -24,13 +25,9 @@ export async function SendEmailVerifyUser(
 
     const data = await response.json()
 
-    const message =
-      data && data.data && typeof data.data.message === 'string'
-        ? data.data.message
-        : JSON.stringify(data?.data?.message || '')
-
-    if (message && message.includes('Failed to send email'))
-      throw new Error('E-mail não cadastrado!')
+    if (!response.ok) {
+      return UserRequestError(data.message)
+    }
     return { data: null, error: '', ok: true }
   } catch (error) {
     return apiError(error)
