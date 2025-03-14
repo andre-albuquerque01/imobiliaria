@@ -2,6 +2,7 @@
 
 import ApiAction from '@/functions/data/apiAction'
 import apiError from '@/functions/error/apiErro'
+import { UserRequestWithReturnError } from '@/functions/error/user-request'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -17,12 +18,10 @@ export async function Logout() {
 
     const data = await response.json()
 
-    const message =
-      data && data.data && typeof data.data.message === 'string'
-        ? data.data.message
-        : JSON.stringify(data?.data?.message || '')
+    if (!response.ok) return UserRequestWithReturnError(data.message)
 
-    if (message && message.includes('Unauthenticated.')) return 'Não autorizado'
+    if (data.message && data.message === 'Unauthenticated.')
+      return 'Não autorizado'
 
     cookies().delete('token')
   } catch (error) {
