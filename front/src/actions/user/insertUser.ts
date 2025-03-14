@@ -3,6 +3,7 @@
 import ApiAction from '@/functions/data/apiAction'
 import { RevalidateTag } from '@/functions/data/revalidateTag'
 import apiError from '@/functions/error/apiErro'
+import { UserRequestError } from '@/functions/error/user-request'
 import VerificationPassword from '@/functions/other/verifyPassword'
 import { redirect } from 'next/navigation'
 
@@ -47,39 +48,9 @@ export async function InsertUser(
 
     const data = await response.json()
 
-    const message =
-      data && data.data && typeof data.data.message === 'string'
-        ? data.data.message
-        : JSON.stringify(data?.data?.message || '')
-
-    if (message && message.includes('The email has already been taken.'))
-      throw new Error('E-mail já cadastrado!')
-    if (
-      message &&
-      message.includes('The password field must be at least 8 characters.')
-    )
-      throw new Error('A senha deve ter ao menos 8 caracters')
-    if (
-      message &&
-      message.includes('The password field must contain at least one symbol.')
-    )
-      throw new Error('A senha precisa de um caracter especial')
-    if (
-      message &&
-      message.includes(
-        'The password field must contain at least one uppercase and one lowercase letter.',
-      )
-    )
-      throw new Error(
-        'Senha precisa de ao menos uma letra maisucla e uma minisucla',
-      )
-    if (
-      message &&
-      message.includes(
-        'The given password has appeared in a data leak. Please choose a different password.',
-      )
-    )
-      throw new Error('Senha fraca.')
+    if (response.status !== 201) {
+      return UserRequestError(data.message)
+    }
   } catch (error) {
     return apiError(error)
   }
