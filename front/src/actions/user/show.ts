@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation'
 
 export default async function User() {
   try {
-    const response = await ApiAction('/user', {
+    const response = await ApiAction('/user/show', {
       headers: {
         Accept: 'application/json',
         Authorization: 'Bearer ' + cookies().get('token')?.value,
