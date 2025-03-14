@@ -14,7 +14,7 @@ export async function SendEmailUser(
       throw new Error('Preenchas os dados!')
     }
 
-    const response = await ApiAction('/email/recoverPasswordSendEmail', {
+    const response = await ApiAction('/user/sendTokenRecover', {
       method: 'POST',
       headers: {
         accept: 'application/json',
