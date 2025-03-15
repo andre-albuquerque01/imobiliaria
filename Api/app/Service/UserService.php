@@ -50,7 +50,7 @@ class UserService implements UserServiceInterface
             $data['is_admin'] = 0;
             $data['remember_token'] = Str::random(60);
             $user = User::create($data);
-            dispatch(new SendVerifyEmailJob($user->email, Crypt::encrypt($user->remember_token), $user->idUser));
+            dispatch(new SendVerifyEmailJob($user->email, $user->remember_token, $user->idUser));
             return response()->json(['message' => 'success'], 201);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
@@ -114,7 +114,7 @@ class UserService implements UserServiceInterface
             if (!$user) {
                 return response()->json(['message' => 'User not found'], 404);
             }
-            dispatch(new SendVerifyEmailJob($user->email, Crypt::encrypt($user->remember_token), $user->idUser));
+            dispatch(new SendVerifyEmailJob($user->email, $user->remember_token, $user->idUser));
             return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             throw new UserException('', $e->getCode(), $e);
