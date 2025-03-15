@@ -3,6 +3,7 @@
 import ApiAction from '@/functions/data/apiAction'
 import { RevalidateTag } from '@/functions/data/revalidateTag'
 import apiError from '@/functions/error/apiErro'
+import { HouseRequestError } from '@/functions/error/house-request'
 import { cookies } from 'next/headers'
 
 export async function InsertHouse(
@@ -30,13 +31,9 @@ export async function InsertHouse(
 
     const data = await response.json()
 
-    const message =
-      data && data.data && typeof data.data.message === 'string'
-        ? data.data.message
-        : JSON.stringify(data?.data?.message || '')
-
-    if (message && message.includes('The email has already been taken.'))
-      throw new Error('E-mail já cadastrado!')
+    if (!response.ok) {
+      return HouseRequestError(data.message)
+    }
 
     RevalidateTag('house')
     return { data: null, error: '', ok: true }
