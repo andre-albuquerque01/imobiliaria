@@ -10,13 +10,19 @@ export async function ShowHousesUser(page: number) {
         Accept: 'application/json',
         Authorization: 'Bearer ' + cookies().get('token')?.value,
       },
+      cache: 'no-store',
       next: {
-        revalidate: 60 * 30,
+        // revalidate: 60 * 30,
         tags: ['house'],
       },
     })
 
     const datas = await response.json()
+    console.log(datas)
+
+    if (datas.message === 'House not found') {
+      return { data: [], countPage: 0 }
+    }
 
     if (!datas.meta || typeof datas.meta.last_page === 'undefined') {
       throw new Error('Estrutura de dados inesperada.')
@@ -27,6 +33,7 @@ export async function ShowHousesUser(page: number) {
 
     return { data, countPage }
   } catch (err) {
-    return null
+    console.error(err)
+    return { data: [], countPage: 0 }
   }
 }
