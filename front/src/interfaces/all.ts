@@ -6,10 +6,7 @@ export interface HouseInterface {
   value: number
   rooms: number
   image: {
-    imageOne: string
-    imageTwo?: string
-    imageThree?: string
-    imageFour?: string
+    image: string
   }[]
   user: {
     idUser: string
