@@ -86,7 +86,9 @@ export const InsertUserComponent = () => {
           <span className="text-xs text-red-600"> *</span>
         </label>
       </div>
-      {state.error && <p className="text-xs text-red-600">{state.error}</p>}
+      {state.error && (
+        <p className="text-xs text-red-600 w-80">{state.error}</p>
+      )}
       <FormButton />
     </form>
   )
