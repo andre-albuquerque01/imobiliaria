@@ -14,32 +14,41 @@ export const CardHouseUser = ({
   countPage: number
 }) => {
   return (
-    <>
+    <div className="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-4 w-full mx-auto justify-center">
       {data &&
         data.length > 0 &&
         data.map((house) => (
           <div
-            className="md:w-[800px] max-md:w-80 border md:h-40 mx-auto max-md:max-h-[120px] rounded-lg transform duration-200 hover:text-zinc-400"
+            className="bg-white w-[320px]  shadow-lg rounded-lg overflow-hidden hover:scale-[1.02] transition-transform duration-200"
             key={house.idHouse}
           >
-            <Link
-              href={`/house/${house.idHouse}`}
-              className="flex h-full py-4 pr-2"
-            >
-              <Image
-                src={
-                  house.image[0]?.imageOne ||
-                  'https://images.pexels.com/photos/101808/pexels-photo-101808.jpeg?auto=compress&cs=tinysrgb&w=600'
-                }
-                width={150}
-                height={150}
-                alt="Imagem do anúncio"
-                className="object-contain max-h-40 w-[30%] max-w-40 max-md:max-h-[90px] mx-4"
-              />
-              <div className="flex justify-between w-[70%] max-md:flex-col">
-                <div className="flex flex-col justify-between">
-                  <h1 className="truncate w-full">{house.title}</h1>
-                  <p>R$ {house.value}</p>
+            <Link href={`/house/${house.idHouse}`} className="block">
+              <div className="relative w-full h-40">
+                <Image
+                  src={
+                    house.image[0]?.image ||
+                    'https://images.pexels.com/photos/101808/pexels-photo-101808.jpeg?auto=compress&cs=tinysrgb&w=600'
+                  }
+                  layout="fill"
+                  objectFit="cover"
+                  alt="Imagem do anúncio"
+                />
+              </div>
+              <div className="p-2 flex flex-col justify-between h-32">
+                <h2 className="text-lg font-semibold truncate">
+                  {house.title}
+                </h2>
+
+                <div className="flex justify-between items-center">
+                  <p className="text-lg font-bold text-green-600">
+                    R${' '}
+                    {house.value.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                  </p>
                 </div>
                 <div className="hover:text-red-600">
                   <DeleteHouseComponente id={house.idHouse} />
@@ -49,6 +58,6 @@ export const CardHouseUser = ({
           </div>
         ))}
       <LinkPagination query={query} countPage={countPage} />
-    </>
+    </div>
   )
 }
