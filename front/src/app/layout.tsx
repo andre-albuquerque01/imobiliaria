@@ -1,9 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { fontBody } from './font'
-import { HeaderOff } from '@/components/header/navOff'
+import { Header } from '@/components/header/nav'
 import { cookies } from 'next/headers'
-import { HeaderOn } from '@/components/header/navOn'
 
 export const metadata: Metadata = {
   title: 'Imobiliaria',
@@ -21,8 +20,8 @@ export default function RootLayout({
   return (
     <html lang="pt-br" className={fontBody.className}>
       <body className="antialiased scroll-smooth">
-        {authentication ? <HeaderOn /> : <HeaderOff />}
-        <div className="max-w-[1200px] mx-auto">{children}</div>
+        <Header authentication={authentication} />
+        <div className="container mx-auto">{children}</div>
       </body>
     </html>
   )
