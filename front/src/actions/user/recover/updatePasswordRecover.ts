@@ -22,7 +22,7 @@ export async function UpdatePasswordRecoverUser(
     }
     VerificationPassword(request.password)
 
-    const response = await ApiAction('/resetPassword', {
+    const response = await ApiAction('/user/resetPassword', {
       method: 'PUT',
       headers: {
         accept: 'application/json',
