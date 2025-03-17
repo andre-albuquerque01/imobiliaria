@@ -18,7 +18,6 @@ export async function ShowHousesUser(page: number) {
     })
 
     const datas = await response.json()
-    console.log(datas)
 
     if (datas.message === 'House not found') {
       return { data: [], countPage: 0 }
