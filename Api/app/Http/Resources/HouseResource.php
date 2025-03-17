@@ -22,7 +22,7 @@ class HouseResource extends JsonResource
             "rooms" => $this->rooms,
             "value" => $this->value,
             "address" => $this->address,
-            "created_at" => Carbon::make($this->created_at)->format('d-m-y H:i:s'),
+            "created_at" => Carbon::make($this->created_at)->format('d-m-Y H:i:s'),
             "image"=> ImageResource::collection($this->whenLoaded("images")),
             "user"=> new User2Resource($this->whenLoaded("user")),
         ];
