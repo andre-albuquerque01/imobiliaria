@@ -27,14 +27,15 @@ class HouseRequest extends FormRequest
             "rooms" => ["nullable", "min:1", "max:20"],
             "value" => ["required", "min:2", "max:255"],
             "address" => ["required", "string", "min:2", "max:255"],
-            "image" => ["required", "array", "min:1"], 
-            "image.*" => ["required", "string", "url"], 
+            "image" => ["required", "array", "min:1"],
+            "image.*" => ["required", "string", "url"],
         ];
 
         if ($this->method() === "PUT") {
             $rules["title"] = ["nullable", "string", "min:4", "max:255"];
             $rules["description"] = ["nullable", "string", "min:4", "max:255"];
-            $rules["value"] = ["nullable", "string", "min:2", "max:255"];
+            $rules["value"] = ["nullable", "min:2", "max:255"];
+            $rules["rooms"] = ["nullable", "min:1", "max:255"];
             $rules["address"] = ["nullable", "string", "min:2", "max:255"];
             $rules["image"] = ["nullable", "array"];
             $rules["image.*"] = ["nullable", "string", "url"];
