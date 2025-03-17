@@ -21,7 +21,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
 
   return (
     <div className="flex flex-col gap-3 my-3">
-      <div className="md:w-[800px] max-md:w-80 mx-auto">
+      <div className="md:w-[98%] max-md:w-80 max-md:mx-auto">
         <SearchForm />
       </div>
       {data && data.length > 0 ? (
