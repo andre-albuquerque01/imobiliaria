@@ -1,6 +1,7 @@
 'use server'
 
 import ApiAction from '@/functions/data/apiAction'
+import { UserRequestWithReturnError } from '@/functions/error/user-request'
 
 export interface UserInterface {
   name: string
@@ -9,7 +10,7 @@ export interface UserInterface {
 
 export default async function VerifyEmail(id: string, hash: string) {
   try {
-    const response = await ApiAction(`/email/verify/${id}/${hash}`, {
+    const response = await ApiAction(`/user/verify/${id}/${hash}`, {
       headers: {
         Accept: 'application/json',
       },
@@ -17,12 +18,9 @@ export default async function VerifyEmail(id: string, hash: string) {
 
     const data = await response.json()
 
-    const message =
-      data && data.data && typeof data.data.message === 'string'
-        ? data.data.message
-        : JSON.stringify(data?.data?.message || '')
+    if (!response.ok) return UserRequestWithReturnError(data.message)
 
-    if (message.includes('success')) return 'Verificado com sucesso'
+    if (data.message === 'success') return 'Verificado com sucesso'
     return 'Houver erro na verificação'
   } catch (error) {
     return 'Houver erro na verificação'
