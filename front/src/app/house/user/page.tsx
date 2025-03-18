@@ -18,13 +18,11 @@ export default async function HouseUser({ searchParams }: SearchParamsProps) {
   let { page } = searchParams || 1
   if (page === undefined) page = 1
 
-  const dt = (await ShowHousesUser(page)) as requestType
-  const data = dt.data
-  const count = dt.countPage
+  const { data = [], countPage } = (await ShowHousesUser(page)) as requestType
 
   return (
     <div className="mt-2 flex flex-col gap-3">
-      <div className="md:w-[800px] max-md:w-80 mx-auto space-y-3">
+      <div className="space-y-3">
         <Link
           href="/house/insert"
           className="flex items-center text-blue-500 gap-2 w-40 hover:underline"
@@ -37,10 +35,10 @@ export default async function HouseUser({ searchParams }: SearchParamsProps) {
           Meus anúncios
         </h1>
       </div>
-      {data.length > 0 ? (
-        <CardHouseUser countPage={count} query={page} data={data} />
+      {data && data.length > 0 ? (
+        <CardHouseUser countPage={countPage} query={page} data={data} />
       ) : (
-        <p>Não há anúncios publicado!</p>
+        <p className="text-neutral-500">Não há anúncios publicado!</p>
       )}
     </div>
   )
