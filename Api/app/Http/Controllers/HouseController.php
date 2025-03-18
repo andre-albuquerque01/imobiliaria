@@ -26,11 +26,7 @@ class HouseController extends Controller
     }
     public function housesUser()
     {
-        try {
-            return $this->houseService->housesUser();
-        } catch (\Exception $e) {
-            throw new HouseException('', $e->getCode(), $e);
-        }
+        return $this->houseService->housesUser();
     }
 
     public function store(HouseRequest $data)
@@ -61,11 +57,7 @@ class HouseController extends Controller
 
     public function update(string $id, HouseRequest $data)
     {
-        try {
-            return $this->houseService->update($id, $data->validated());
-        } catch (\Exception $e) {
-            throw new HouseException('Failed to update house and images', $e->getCode(), $e);
-        }
+        return $this->houseService->update($id, $data->validated());
     }
 
 
