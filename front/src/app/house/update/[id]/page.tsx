@@ -7,7 +7,7 @@ export default async function UpdateHouse({
   params: { id: string }
 }) {
   return (
-    <div className="flex justify-center items-center min-h-screen ">
+    <div className="flex justify-center items-center min-h-[calc(100vh-80px)]">
       <Suspense>
         <UpdateHouseComponent id={params.id} />
       </Suspense>
