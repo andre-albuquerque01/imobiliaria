@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function InsertHouse() {
   return (
-    <div className="flex justify-center items-center min-h-screen ">
+    <div className="flex justify-center items-center min-h-[calc(100vh-80px)]">
       <InsertHouseComponent />
     </div>
   )
