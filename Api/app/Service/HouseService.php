@@ -91,9 +91,8 @@ class HouseService implements HouseServiceInterface
             }
 
             $house->update($data);
-
             if (!empty($data['image'])) {
-                $house->images()->delete();
+                Images::where('house_id', $house->idHouse)->delete();
 
                 foreach ($data['image'] as $imageUrl) {
                     $house->images()->create([
