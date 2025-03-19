@@ -18,7 +18,10 @@ export async function UpdateUser(reqBody: object) {
 
     const data = await response.json()
     if (!response.ok) return UserRequestWithReturnError(data.message)
-    return true
+    if (response.ok) {
+      return true
+    }
+    return ' '
   } catch (error) {
     return 'Houver error'
   }
