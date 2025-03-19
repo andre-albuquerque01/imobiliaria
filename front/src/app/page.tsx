@@ -15,9 +15,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
   let { page } = searchParams || 1
   if (page === undefined) page = 1
 
-  const dt = (await ShowHouses(page)) as requestType
-  const data = dt.data
-  const count = dt.countPage
+  const { data = [], countPage } = (await ShowHouses(page)) as requestType
 
   return (
     <div className="flex flex-col gap-3 my-3">
@@ -25,7 +23,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
         <SearchForm />
       </div>
       {data && data.length > 0 ? (
-        <Card countPage={count} query={page} data={data} letter="p" />
+        <Card countPage={countPage} query={page} data={data} letter="p" />
       ) : (
         <p>Não há anúncios disponível!</p>
       )}
