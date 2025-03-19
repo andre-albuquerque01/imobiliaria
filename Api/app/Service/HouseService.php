@@ -110,7 +110,8 @@ class HouseService implements HouseServiceInterface
     public function destroy(string $id)
     {
         try {
-            House::findOrFail($id, 'idHouse')->delete();
+            $house = House::findOrFail($id, 'idHouse')->delete();
+            Images::where('house_id', $house->idHouse)->delete();
             return response()->json(['message' => 'success'], 200);
         } catch (\Exception $e) {
             throw new HouseException('', $e->getCode(), $e);
