@@ -5,28 +5,33 @@ import { RevalidateTag } from '@/functions/data/revalidateTag'
 import apiError from '@/functions/error/apiErro'
 import { HouseRequestError } from '@/functions/error/house-request'
 import { cookies } from 'next/headers'
+import { requestType } from './update'
 
-export async function InsertHouse(
-  state: { ok: boolean; error: string; data: null },
-  request: FormData,
-) {
-  const title = request.get('title') as string | null
-  const description = request.get('description') as string | null
-  const value = request.get('value') as string | null
-  const address = request.get('address') as string | null
-
+export async function InsertHouse(request: requestType) {
+  console.log(request)
   try {
-    if (!title || !description || !address || !value) {
-      throw new Error('Preenchas os dados!')
+    if (
+      !request.title ||
+      !request.description ||
+      !request.address ||
+      !request.value ||
+      request.image.length === 0
+    ) {
+      return {
+        error: 'Preencha os dados!',
+        ok: false,
+        data: null,
+      }
     }
 
     const response = await ApiAction('/house', {
       method: 'POST',
       headers: {
         accept: 'application/json',
+        'Content-Type': 'application/json',
         Authorization: 'Bearer ' + cookies().get('token')?.value,
       },
-      body: request,
+      body: JSON.stringify(request),
     })
 
     const data = await response.json()
