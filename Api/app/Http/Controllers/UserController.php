@@ -26,11 +26,7 @@ class UserController extends Controller
 
     public function store(UserRequest $request)
     {
-        try {
-            return $this->userService->store($request->validated());
-        } catch (\Exception $e) {
-            throw new UserException('', $e->getCode(), $e);
-        }
+        return $this->userService->store($request->validated());
     }
     public function update(UserRequest $request)
     {
