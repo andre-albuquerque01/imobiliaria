@@ -18,9 +18,10 @@ export const InputUpdateComponent = ({ ...props }: InputProps) => {
         type={props.type}
         name={props.name}
         id={props.id}
-        className="bg-transparent border border-zinc-400 p-1.5 outline-none text-black rounded-lg w-96 max-sm:w-80"
+        className="bg-transparent border border-zinc-400 p-1.5 outline-none text-black rounded-lg w-full"
         required={props.required}
         defaultValue={props.value}
+        step={0.01}
       />
     </div>
   )
