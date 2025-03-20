@@ -1,8 +1,8 @@
 'use server'
 
 import ApiAction from '@/functions/data/apiAction'
-import apiError from '@/functions/error/apiErro'
-import VerificationPassword from '@/functions/other/verifyPassword'
+import { UserRequestWithReturnError } from '@/functions/error/user-request'
+
 export interface UpdatePasswordRequestInterface {
   token: string
   email: string
@@ -20,7 +20,6 @@ export async function UpdatePasswordRecoverUser(
     if (request.password !== request.password_confirmation) {
       return 'Senhas incompatíveis!'
     }
-    VerificationPassword(request.password)
 
     const response = await ApiAction('/user/resetPassword', {
       method: 'PUT',
@@ -33,43 +32,13 @@ export async function UpdatePasswordRecoverUser(
 
     const data = await response.json()
 
-    const message =
-      typeof data.message === 'string'
-        ? data.message
-        : JSON.stringify(data.message)
-
-    let text = ''
-    switch (message) {
-      case message.includes(
-        'The password field must be at least 8 characters.',
-      ):
-        text = 'A senha deve ter ao menos 8 caracteres'
-        break
-      case message.includes(
-        'The password field must contain at least one symbol.',
-      ):
-        text = 'A senha precisa de um caractere especial'
-        break
-      case message.includes(
-        'The password field must contain at least one uppercase and one lowercase letter.',
-      ):
-        text = 'A senha precisa de ao menos uma letra maiúscula e uma minúscula'
-        break
-      case message.includes(
-        'The given password has appeared in a data leak. Please choose a different password.',
-      ):
-        text = 'Senha fraca.'
-        break
-      default:
-        return true
-    }
-
     if (!response.ok) {
-      return { ok: false, error: 'Houve erro, tente novamente', data: null }
+      return UserRequestWithReturnError(data.message)
     }
 
-    return text
+    return true
   } catch (error) {
-    return apiError(error)
+    console.error(error)
+    return 'Houve error.'
   }
 }
