@@ -2,6 +2,8 @@ import { ShowOneHouses } from '@/actions/house/getOne'
 import User from '@/actions/user/show'
 import Carousel from '@/components/house/carousel'
 import { GotBack } from '@/components/others/gotBack'
+import { formatPhoneNumber } from '@/functions/other/formatPhoneNumber'
+import { handleValue } from '@/functions/other/handleTypeValue'
 import { HouseInterface, UserInterface } from '@/interfaces/all'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -27,12 +29,14 @@ export default async function HouseOne({ params }: { params: { id: string } }) {
             <p className="text-gray-700 font-medium">
               🛏 Quartos: {data.rooms}
             </p>
-            <p className="text-gray-700 font-medium">💰 Valor: {data.value}</p>
+            <p className="text-gray-700 font-medium">
+              💰 Valor: {handleValue(Number(data.value))}
+            </p>
             <p className="text-gray-700 font-medium">
               📍 Endereço: {data.address}
             </p>
             <p className="text-gray-700 font-medium">
-              📞 Contato: {data.user?.contact}
+              📞 Contato: {formatPhoneNumber(data.user?.contact)}
             </p>
 
             {data.user && data.user.idUser === user?.idUser && (
