@@ -25,7 +25,7 @@ class UserRequest extends FormRequest
     {
         $rules = [
             "name" => ["required", "string", "min:4", "max:255"],
-            "contact" => ["required", "string", "min:8", "max:11"],
+            "contact" => ["required", "string", "min:8", "max:11", "unique:users",],
             "term_aceite" => ["required"],
             "email" => [
                 "required",
@@ -75,7 +75,7 @@ class UserRequest extends FormRequest
             ];
             $rules["password_confirmation"] = ["nullable"];
             $rules["term_aceite"] = ["nullable"];
-            $rules["contact"] = ["nullable", "string", "min:8", "max:11"];
+            $rules["contact"] = ["nullable", "string", "min:8", "max:11", Rule::unique('users', 'contact')->ignore($this->user()->idUser, 'idUser'),];
         }
         return $rules;
     }
@@ -91,6 +91,7 @@ class UserRequest extends FormRequest
             "contact.required" => "O contato é obrigatório.",
             "contact.min" => "O nome deve ter pelo menos 8 caracteres.",
             "contact.max" => "O nome não pode ter mais de 11 caracteres.",
+            "contact.unique" => "Esse número de telefone já está cadastrado.",
             
             "term_aceite.required" => "É necessário aceitar os termos.",
             "term_aceite.regex" => "O campo de aceite contém caracteres inválidos.",
