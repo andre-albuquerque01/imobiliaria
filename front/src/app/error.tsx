@@ -13,7 +13,7 @@ export default function Error({
   }, [error])
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen gap-3 mt-[-80px]">
+    <div className="flex flex-col justify-center items-center gap-3 h-[calc(100vh-80px)]">
       <h1 className="text-black text-2xl">
         Olá! Desculpe, infelizmente aconteceu algo não esperado.
       </h1>
