@@ -1,4 +1,4 @@
-import { InsertUserComponent } from '@/components/user/insert/InsertUserComponent'
+import { InsertUserComponent } from '@/components/user/insert-user'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {

@@ -1,5 +1,5 @@
 import { ShowHousesUser } from '@/actions/house/getHouseUser'
-import { CardHouseUser } from '@/components/house/cardHouseUser/card'
+import { CardHouseUser } from '@/components/cards/card-house-user'
 import Link from 'next/link'
 import { BiPlusCircle } from 'react-icons/bi'
 import { BsPersonWorkspace } from 'react-icons/bs'
