@@ -1,6 +1,6 @@
 import { ShowHousesSearch } from '@/actions/house/search'
-import { Card } from '@/components/cardHome/card'
-import SearchForm from '@/components/house/search/searchQuery'
+import { Card } from '@/components/cards/card-home'
+import SearchForm from '@/components/navigation/search-query'
 interface SearchParamsProps {
   searchParams: {
     q: string

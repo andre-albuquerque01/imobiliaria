@@ -1,4 +1,4 @@
-import { UpdateHouseComponent } from '@/components/house/update/update'
+import { UpdateHouseComponent } from '@/components/house/update-house'
 import { Suspense } from 'react'
 
 export default async function UpdateHouse({
