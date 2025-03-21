@@ -1,4 +1,4 @@
-import { SendEmailComponent } from '@/components/user/recover/sendEmail'
+import { SendEmailComponent } from '@/components/user/recover/send-email-recover-password'
 
 export default function SendEmail() {
   return (

@@ -1,4 +1,4 @@
-import { UpdateUserComponent } from '@/components/user/update/updateUser'
+import { UpdateUserComponent } from '@/components/user/update-user'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
