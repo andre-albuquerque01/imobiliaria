@@ -1,4 +1,4 @@
-import { SendEmailVerifyComponent } from '@/components/user/verify/SendEmailVerify'
+import { SendEmailVerifyComponent } from '@/components/user/send-email-verify'
 
 export default function SendEmailVerify() {
   return (
