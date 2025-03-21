@@ -1,4 +1,4 @@
-import { InsertHouseComponent } from '@/components/house/insert/InsertHouseComponent'
+import { InsertHouseComponent } from '@/components/house/insert-house'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
