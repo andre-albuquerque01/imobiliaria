@@ -1,4 +1,4 @@
-import { UpdatePasswordRecoverComponent } from '@/components/user/recover/updatePasswordRecover'
+import { UpdatePasswordRecoverComponent } from '@/components/user/recover/update-password-recover'
 import { redirect } from 'next/navigation'
 
 export default function SendEmail({ params }: { params: { token: string } }) {
