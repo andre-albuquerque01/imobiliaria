@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { fontBody } from './font'
-import { Header } from '@/components/header/nav'
+import { Header } from '@/components/navigation/nav'
 import { cookies } from 'next/headers'
 
 export const metadata: Metadata = {

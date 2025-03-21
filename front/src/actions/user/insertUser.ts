@@ -4,7 +4,7 @@ import ApiAction from '@/functions/data/apiAction'
 import { RevalidateTag } from '@/functions/data/revalidateTag'
 import apiError from '@/functions/error/apiErro'
 import { UserRequestError } from '@/functions/error/user-request'
-import VerificationPassword from '@/functions/other/verifyPassword'
+import VerificationPassword from '@/functions/function/verifyPassword'
 import { redirect } from 'next/navigation'
 
 export async function InsertUser(
