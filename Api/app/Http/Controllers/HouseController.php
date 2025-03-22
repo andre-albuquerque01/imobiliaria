@@ -18,11 +18,8 @@ class HouseController extends Controller
     }
     public function index()
     {
-        try {
-            return $this->houseService->index();
-        } catch (\Exception $e) {
-            throw new HouseException('', $e->getCode(), $e);
-        }
+
+        return $this->houseService->index();
     }
     public function housesUser()
     {
@@ -31,28 +28,19 @@ class HouseController extends Controller
 
     public function store(HouseRequest $data)
     {
-        try {
-            return $this->houseService->store($data->validated());
-        } catch (\Exception $e) {
-            throw new HouseException('', $e->getCode(), $e);
-        }
+
+        return $this->houseService->store($data->validated());
     }
 
     public function show(string $id)
     {
-        try {
-            return $this->houseService->show($id);
-        } catch (\Exception $e) {
-            throw new HouseException('', $e->getCode(), $e);
-        }
+
+        return $this->houseService->show($id);
     }
     public function showTitle(string $title)
     {
-        try {
-            return $this->houseService->showTitle($title);
-        } catch (\Exception $e) {
-            throw new HouseException('', $e->getCode(), $e);
-        }
+
+        return $this->houseService->showTitle($title);
     }
 
     public function update(string $id, HouseRequest $data)
@@ -63,10 +51,7 @@ class HouseController extends Controller
 
     public function destroy(string $id)
     {
-        try {
-            return $this->houseService->destroy($id);
-        } catch (\Exception $e) {
-            throw new HouseException('', $e->getCode(), $e);
-        }
+
+        return $this->houseService->destroy($id);
     }
 }
