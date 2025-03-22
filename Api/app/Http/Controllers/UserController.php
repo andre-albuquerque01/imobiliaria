@@ -30,74 +30,43 @@ class UserController extends Controller
     }
     public function update(UserRequest $request)
     {
-        try {
-            return $this->userService->update($request->validated());
-        } catch (\Exception $e) {
-            throw new UserException('', $e->getCode(), $e);
-        }
+        return $this->userService->update($request->validated());
     }
 
     public function show()
     {
-        try {
-            return $this->userService->show();
-        } catch (\Exception $e) {
-            throw new UserException('', $e->getCode(), $e);
-        }
+        return $this->userService->show();
     }
 
     public function destroy()
     {
-        try {
-            return $this->userService->destroy();
-        } catch (\Exception $e) {
-            throw new UserException('', $e->getCode(), $e);
-        }
+        return $this->userService->destroy();
     }
 
     public function logout(Request $request)
     {
-        try {
-            $request->user()->currentAccessToken()->delete();
-            return new GeneralResource(['message' => "success"]);
-        } catch (\Exception $e) {
-            throw new UserException('', $e->getCode(), $e);
-        }
+        $request->user()->currentAccessToken()->delete();
+        return new GeneralResource(['message' => "success"]);
     }
 
     public function verifyEmail(string $id, string $token)
     {
-        try {
-            return $this->userService->verifyEmail($id, $token);
-        } catch (UserException $e) {
-            throw new UserException();
-        }
+
+        return $this->userService->verifyEmail($id, $token);
     }
     public function resendEmail(Request $request)
     {
-        try {
-            $validatedData = $request->validate(['email' => 'required|email']);
-            return $this->userService->resendEmail($validatedData['email']);
-        } catch (\Exception $e) {
-            throw new UserException('', $e->getCode(), $e);
-        }
+        $validatedData = $request->validate(['email' => 'required|email']);
+        return $this->userService->resendEmail($validatedData['email']);
     }
 
     public function sendTokenRecover(Request $request)
     {
-        try {
-            $validatedData = $request->validate(['email' => 'required|email']);
-            return $this->userService->sendTokenRecover($validatedData['email']);
-        } catch (\Exception $e) {
-            throw new UserException('', $e->getCode(), $e);
-        }
+        $validatedData = $request->validate(['email' => 'required|email']);
+        return $this->userService->sendTokenRecover($validatedData['email']);
     }
     public function resetPassword(RecoverPasswordRequest $request)
     {
-        try {
-            return $this->userService->resetPassword($request->validated());
-        } catch (\Exception $e) {
-            throw new UserException('', $e->getCode(), $e);
-        }
+        return $this->userService->resetPassword($request->validated());
     }
 }
