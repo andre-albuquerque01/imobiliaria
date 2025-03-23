@@ -13,7 +13,7 @@ export const DeleteHouseComponente = ({ id }: { id: string }) => {
   }
 
   return (
-    <button onClick={handleDelete} className=" hover:text-red-500">
+    <button onClick={handleDelete} className=" hover:text-blue-500">
       <FiTrash size={20} />
     </button>
   )
